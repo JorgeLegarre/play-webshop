@@ -1,0 +1,14 @@
+@(orders: List[models.Order])
+
+@generalLookAndFeel("Showing orders") {
+	N Orders: @orders.size()<br>
+	
+	<ul>
+		@for(order <- orders){
+			<li>
+				<a href="/orders/@order.getId">@order.getId - @order.getDate</a>
+			</li>
+		}
+	</ul>
+}
+

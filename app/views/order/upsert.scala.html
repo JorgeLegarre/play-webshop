@@ -1,0 +1,51 @@
+@* upsert Template File *@
+@(order: models.Order)
+
+@generalLookAndFeel("Showing an order") {
+	Order<br>
+	---------------------------------<br>
+	id: @order.getId<br>
+	User id: @order.getUserId<br>
+	Date: @order.getDate<br>
+	<br>
+	Order details<br>
+	---------------------------------<br>
+	<table>
+		<thead>
+			<tr>
+				<th>Product id</th>
+				<th>Product name</th>
+				<th>Quantity</th>
+				<th>Unit price</th>
+				<th>Subtotal</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for(detail <- order.getOrderDetails){
+				<tr>
+					<td>
+						@detail.getProductId
+					</td>
+					<td>
+						@detail.getName
+					</td>
+					<td>
+						@detail.getQuantity
+					</td>
+					<td>
+						@detail.getRrp
+					</td>
+					<td>
+						@detail.getSubTotalRrp
+					</td>
+				</tr>
+			}
+		</tbody>
+		<tfoot>
+	    <tr>
+	      <td colspan="4">Total</td>
+	      <td>@order.getTotalRRP</td>
+	    </tr>
+	  </tfoot>
+	</table>
+}
