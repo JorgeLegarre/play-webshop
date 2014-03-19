@@ -4,32 +4,36 @@
 
 # PRIVATE
 # init DB
-GET /init							  		       	controllers.Application.init()
+GET 	/init							 	       	controllers.ApplicationController.init()
 
 # login
-GET /private							  		   	controllers.Application.showLogin()
-POST /private/login						  		   	controllers.Application.login()
+GET 	/private						  		   	controllers.ApplicationController.showLogin()
+POST 	/private/login					  		   	controllers.ApplicationController.login()
 
 # main menu
-GET /private/mainMenu					  		   	controllers.Application.mainMenu()
+GET 	/private/mainMenu					  	   	controllers.ApplicationController.mainMenu()
 
 # producs
-GET     /private/products                          	controllers.Product.listAllProducts()
-GET     /private/products/:id                      	controllers.Product.showOneProduct(id : Int)
+GET     /private/products                          	controllers.ProductController.listAllProducts()
+GET     /private/products/                         	controllers.ProductController.listAllProducts()
+GET     /private/products/:id                      	controllers.ProductController.showOneProduct(id : Int)
 
 #category
-GET     /private/categories                        	controllers.Category.listAllCategories()
-GET     /private/categories/:id                    	controllers.Category.showOneCategory(id : Int)
+GET     /private/categories                        	controllers.CategoryController.listAllCategories()
+GET     /private/categories/                       	controllers.CategoryController.listAllCategories()
+GET     /private/categories/:id                    	controllers.CategoryController.showOneCategory(id : Int)
 
 #user
-GET     /private/users                        	   	controllers.User.listAllUsers()
-GET     /private/users/:id                         	controllers.User.showOneUser(id : Int)
+GET     /private/users                        	   	controllers.UserController.listAllUsers()
+GET     /private/users/                        	   	controllers.UserController.listAllUsers()
+GET     /private/users/:id                         	controllers.UserController.showOneUser(id : Int)
 
 #order
-GET     /private/orders                        	   	controllers.Order.listAllOrders()
-GET     /private/orders/:id                        	controllers.Order.showOneOrder(id : Int)
+GET     /private/orders                        	   	controllers.OrderController.listAllOrders()
+GET     /private/orders/                       	   	controllers.OrderController.listAllOrders()
+GET     /private/orders/:id                        	controllers.OrderController.showOneOrder(id : Int)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               				controllers.Assets.at(path="/public", file)
 
-GET 	/*a											controllers.Application.show404(a)
+GET 	/*a											controllers.ApplicationController.show404(a)

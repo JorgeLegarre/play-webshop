@@ -8,13 +8,13 @@ import views.html.mainMenu;
 import views.html.privateLogin;
 import forms.SignIn;
 
-public class Application extends Controller {
+public class ApplicationController extends Controller {
 
 	@Transactional
 	public static Result init() {
-		Category.fillDB();
-		Product.fillDB();
-		User.fillDB();
+		CategoryController.fillDB();
+		ProductController.fillDB();
+		UserController.fillDB();
 
 		return redirect("/private");
 	}
