@@ -22,7 +22,7 @@ public class Category {
 
 	private int staff_responsible;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
 	private List<Product> products;
 
 	public Category() {
@@ -65,6 +65,14 @@ public class Category {
 
 	public void setStaff_responsible(int staff_responsible) {
 		this.staff_responsible = staff_responsible;
+	}
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
 	}
 
 	@Override

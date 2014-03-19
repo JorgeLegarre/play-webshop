@@ -6,4 +6,5 @@
 	id: @product.getId<br>
 	Name: @product.getName<br>
 	price: @product.getCost<br>
+	Categories: @for(category <- product.getCategories){@category.getName&nbsp;}<br>
 }

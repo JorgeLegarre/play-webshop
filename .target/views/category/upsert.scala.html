@@ -6,4 +6,5 @@
 	id: @category.getId<br>
 	Name: @category.getName<br>
 	Staff responsible: @category.getStaff_responsible<br>
+	Products: @for(product <- category.getProducts){@product.getName&nbsp;}<br>
 }
