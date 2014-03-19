@@ -15,3 +15,10 @@ dist
 /.settings
 /bin
 /.target
+.target
+.target/assets
+.target/controllers
+.target/forms
+.target/models
+.target/views
+
