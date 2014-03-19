@@ -1,6 +1,5 @@
 package controllers;
 
-import java.util.Arrays;
 import java.util.List;
 
 import play.mvc.Controller;
@@ -8,11 +7,14 @@ import play.mvc.Result;
 import views.html.category.listAll;
 import views.html.category.upsert;
 
+import com.avaje.ebean.Ebean;
+
 public class Category extends Controller {
-	private static List<models.Category> listCategories = Arrays
-			.asList(new models.Category[] { new models.Category(1, "Books", 1),
-					new models.Category(2, "Films", 2),
-					new models.Category(3, "Games", 3) });
+	public static void fillDB() {
+		Ebean.save(new models.Category(1, "Books", 1));
+		Ebean.save(new models.Category(2, "Films", 2));
+		Ebean.save(new models.Category(3, "Games", 3));
+	}
 
 	public static Result showOneCategory(int id) {
 		models.Category category = getOneCategory(id);
@@ -25,14 +27,16 @@ public class Category extends Controller {
 	}
 
 	public static Result listAllCategories() {
-		return ok(listAll.render(listCategories));
+		List<models.Category> categories = getAllCategories();
+		return ok(listAll.render(categories));
 	}
 
 	private static models.Category getOneCategory(int id) {
-		if (id > 0 && id <= listCategories.size()) {
-			return listCategories.get(id - 1);
-		}
-		return null;
+		return Ebean.find(models.Category.class, id);
+	}
+
+	private static List<models.Category> getAllCategories() {
+		return Ebean.find(models.Category.class).findList();
 	}
 
 }

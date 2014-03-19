@@ -1,11 +1,16 @@
 package models;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public final class Category {
 	public static final int DEFAULT_ID = -1;
 
-	private int id;
-	private String name;
-	private int staff_responsible;
+	@Id
+	private final int id;
+	private final String name;
+	private final int staff_responsible;
 
 	public Category(int id, String name, int staff_responsible) {
 		this.id = id;
@@ -49,6 +54,7 @@ public final class Category {
 		return false;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("Id: %s, Name: %s, Straff_responsible: %s", id,
 				name, staff_responsible);

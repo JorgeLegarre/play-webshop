@@ -1,6 +1,7 @@
 # Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
+GET		/init								controllers.Application.init()
 
 # producs
 GET     /products                          controllers.Product.listAllProducts()

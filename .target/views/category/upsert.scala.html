@@ -1,2 +1,9 @@
-@* upsert Template File *@
-@(param: Any)
+@(category: models.Category)
+
+@generalLookAndFeel("Showing a category") {
+	Category<br>
+	---------------------------------<br>
+	id: @category.getId<br>
+	Name: @category.getName<br>
+	Staff responsible: @category.getStaff_responsible<br>
+}

@@ -1,2 +1,13 @@
-@* listAll Template File *@
-@(param: Any)
+@(users: List[models.User])
+
+@generalLookAndFeel("Showing users") {
+	N Users: @users.size()<br>
+	
+	<ul>
+		@for(user <- users){
+			<li>
+				<a href="/users/@user.getId">@user.getFirstname (@user.getEmail)</a>
+			</li>
+		}
+	</ul>
+}
