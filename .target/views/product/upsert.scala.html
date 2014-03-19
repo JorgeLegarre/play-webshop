@@ -1,10 +1,97 @@
 @(product: models.Product)
 
 @generalLookAndFeel("Showing a product", 1) {
-	Product<br>
-	---------------------------------<br>
-	id: @product.getId<br>
-	Name: @product.getName<br>
-	price: @product.getCost<br>
-	Categories: @for(category <- product.getCategories){@category.getName&nbsp;}<br>
+	<div class="container">
+	<h2>Product</h2>
+	<form role="form">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="name">Product Name:</label>
+					<input type="text" class="form-control" id="name" placeholder="Product Name"" value="@product.getName" disabled>
+				</div>
+			</div>	
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="description">Product Description:</label>
+					<textarea rows="3" class="form-control" id="description" placeholder="Product Description" disabled>@product.getDescription</textarea>
+				</div>
+			</div>	
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<label for="cost">Product Cost:</label>
+					<input type="number" class="form-control" id="cost" placeholder="Product Cost" min="0" value="@product.getCost" disabled>
+				</div>
+			</div>
+			<div class="col-md-3">	
+				<div class="form-group">
+					<label for="rrp">Product Rrp:</label>
+					<input type="number" class="form-control" id="rrp" placeholder="Product Rrp" min="0" value="@product.getRrp" disabled>
+				</div>
+			</div>	
+		</div>
+		@if(true){
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for=""categories"">Categories:</label>
+						<select id="categories" name="categories" multiple disabled>
+							@for(category <- product.getCategories){
+							    <option>@category.getName</option>
+						    }
+						</select>
+					</div>
+				</div>
+			</div>
+		}else{
+			<div class="row">
+				<div class="col-md-8">
+					<div class="form-group">
+						<label for=""categories"">Categories:</label>
+						<select id="categories" name="categories" multiple>
+							@for(category <- product.getCategories){
+							    <option>@category.getName</option>
+						    }
+						</select>
+						<script>
+						    $(function () {
+						        $('#categories')
+						                .bootstrapDualListbox({
+						                    bootstrap2Compatible: false,
+						                    moveAllLabel: 'MOVE ALL',
+						                    removeAllLabel: 'REMOVE ALL',
+						                    moveSelectedLabel: 'MOVE SELECTED',
+						                    removeSelectedLabel: 'REMOVE SELECTED',
+						                    filterPlaceHolder: 'Filter',
+						                    filterSelected: '2',
+						                    filterNonSelected: '1',
+						                    moveOnSelect: false,
+						                    preserveSelectionOnMove: 'all',
+						                    helperSelectNamePostfix: '_myhelper',
+						                    selectedListLabel: 'Selected',
+						                    nonSelectedListLabel: 'Unselected',
+						                    infotext: 'Showing {0}'
+						                })
+						                .bootstrapDualListbox('setMoveAllLabel', 'Move them all')
+						                .bootstrapDualListbox('setRemoveAllLabel', 'Remove them all')
+						                .bootstrapDualListbox('setSelectedFilter', undefined)
+						                .bootstrapDualListbox('setNonSelectedFilter', undefined)
+						                .bootstrapDualListbox('refresh')
+						    });
+						</script>
+					</div>
+				</div>	
+			</div>
+		}
+		<div class="row">
+			<div class="col-md-1">
+				<a href="/private/products"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
+			</div>
+		</div>
+	</form>
+	</div>
 }

@@ -1,14 +1,36 @@
 @(products: List[models.Product])
 
 @generalLookAndFeel("Showing products", 1) {
-	N Products: @products.size()<br>
+	<h2>Products</h2>
 	
-	<ul>
-		@for(product <- products){
-			<li>
-				<a href="/private/products/@product.getId">@product.getName</a>
-			</li>
-		}
-	</ul>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<td>Id</td>
+					<td>Name</td>
+					<td>Description</td>
+					<td>Cost</td>
+					<td>Rrp</td>
+					<td><span><i class="glyphicon glyphicon-plus"></i></span></td>
+				</tr>
+			</thead>
+			<tbody>
+				@for(product <- products){
+					<tr>
+						<td>@product.getId</td>
+						<td>@product.getName</td>
+						<td>@product.getDescription</td>
+						<td>@product.getCost</td>
+						<td>@product.getRrp</td>
+						<td><a href="/private/products/@product.getId"><i class="glyphicon glyphicon-eye-open"></i></a>
+							<i class="glyphicon glyphicon-pencil"></i>
+							<i class="glyphicon glyphicon-remove"></i>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 }
 
