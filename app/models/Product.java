@@ -1,172 +1,160 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public final class Product {
-	public static final int DEFAULT_PRODUCT_ID = -1;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
-	private final int id;
-	private final String name;
-	private final String description;
-	private final double cost;
-	private final double rrp;
-	private final List<Integer> categories;
+@Entity
+public class Product {
+	public static int DEFAULT_PRODUCT_ID = 0;
 
-	public static class Builder {
-		// Required parameters
-		private final String name;
+	@Id
+	@GeneratedValue
+	private int id;
 
-		// optional parameters
-		private int id;
-		private String description;
-		private double cost;
-		private double rrp;
-		private final List<Integer> categories;
+	@Column(nullable = false)
+	private String name;
 
-		public Builder(String name) {
-			this.name = name;
+	private String description;
 
-			id = DEFAULT_PRODUCT_ID;
-			description = "";
-			cost = 0;
-			rrp = 0;
-			categories = new ArrayList<Integer>();
-		}
+	@Column(nullable = false)
+	private double cost;
 
-		public Builder id(int id) {
-			this.id = id;
-			return this;
-		}
+	@Column(nullable = false)
+	private double rrp;
 
-		public Builder description(String description) {
-			this.description = description;
-			return this;
-		}
+	@ManyToMany(fetch = FetchType.LAZY)
+	private List<Category> categories;
 
-		public Builder cost(double cost) {
-			this.cost = cost;
-			return this;
-		}
-
-		public Builder rrp(double rrp) {
-			this.rrp = rrp;
-			return this;
-		}
-
-		public Builder categories(List<Integer> categories) {
-			if (categories != null) {
-				this.categories.addAll(categories);
-			}
-			return this;
-		}
-
-		public Product build() {
-			return new Product(this);
-		}
+	public Product() {
 
 	}
 
-	private Product(Builder builder) {
-		this.id = builder.id;
-		this.name = builder.name;
-		this.description = builder.description;
-		this.cost = builder.cost;
-		this.rrp = builder.rrp;
-		this.categories = builder.categories;
-	}
-
-	public Product(int id, Product other) {
+	public Product(int id, String name, String description, double cost,
+			double rrp, List<Category> categories) {
+		super();
 		this.id = id;
-		this.name = other.name;
-		this.description = other.description;
-		this.cost = other.cost;
-		this.rrp = other.rrp;
-		this.categories = other.categories;
+		this.name = name;
+		this.description = description;
+		this.cost = cost;
+		this.rrp = rrp;
+		this.categories = categories;
+	}
+
+	public Product(String name, String description, double cost, double rrp,
+			List<Category> categories) {
+		this(DEFAULT_PRODUCT_ID, name, description, cost, rrp, categories);
 	}
 
 	public int getId() {
 		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getName() {
-		return this.name;
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDescription() {
-		return this.description;
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public double getCost() {
-		return this.cost;
+		return cost;
+	}
+
+	public void setCost(double cost) {
+		this.cost = cost;
 	}
 
 	public double getRrp() {
-		return this.rrp;
+		return rrp;
 	}
 
-	public List<Integer> getCategories() {
+	public void setRrp(double rrp) {
+		this.rrp = rrp;
+	}
+
+	public List<Category> getCategories() {
 		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 
 	@Override
 	public int hashCode() {
-		if (id != DEFAULT_PRODUCT_ID) {
-			return 37 * id;
-		}
-
-		int hash = 37;
-		hash *= name.hashCode();
-		hash *= description.hashCode();
-		hash += cost;
-		hash += rrp;
-		hash *= categories.hashCode();
-
-		return hash;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((categories == null) ? 0 : categories.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(cost);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result
+				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		temp = Double.doubleToLongBits(rrp);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == this)
+		if (this == obj)
 			return true;
-		if (obj instanceof Product) {
-			Product other = (Product) obj;
-
-			if ((other.id != DEFAULT_PRODUCT_ID)
-					|| (this.id != DEFAULT_PRODUCT_ID)) {
-				return (other.id == this.id);
-			}
-
-			boolean isEqual = true;
-			isEqual = isEqual && other.name.equals(this.name);
-			isEqual = isEqual && other.description.equals(this.description);
-			isEqual = isEqual && other.cost == this.cost;
-			isEqual = isEqual && other.rrp == this.rrp;
-			isEqual = isEqual && other.categories.equals(this.categories);
-
-			return isEqual;
-
-		}
-		return false;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		if (categories == null) {
+			if (other.categories != null)
+				return false;
+		} else if (!categories.equals(other.categories))
+			return false;
+		if (Double.doubleToLongBits(cost) != Double
+				.doubleToLongBits(other.cost))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (Double.doubleToLongBits(rrp) != Double.doubleToLongBits(other.rrp))
+			return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		String categoriesTxt = "[";
-		boolean first = true;
-		for (int cat : this.categories) {
-			if (!first) {
-				categoriesTxt += ", ";
-			} else {
-				first = false;
-			}
-			categoriesTxt += cat;
-		}
-		categoriesTxt += "]";
-
 		return String
 				.format("Id: %s, Name: %s, Description: %s, Cost: %s, RRP: %s, Categories: %s",
-						id, name, description, cost, rrp, categoriesTxt);
+						id, name, description, cost, rrp, categories);
 	}
-
 }

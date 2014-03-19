@@ -1,104 +1,83 @@
 package models;
 
-public final class User {
+import java.util.List;
 
-	public static final int DEFAULT_USER_ID = -1;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
-	private final int id;
-	private final String email;
-	private final String password;
-	private final String firstname;
-	private final String lastname;
-	private final String dob;
-	private final String telephone;
-	private final String address1;
-	private final String address2;
-	private final String town;
-	private final String postcode;
+@Entity
+public class User {
 
-	public static class Builder {
-		// required fields
-		private final String email;
-		private final String password;
-		private final String firstname;
-		private final String lastname;
-		private final String address1;
-		private final String town;
-		private final String postcode;
+	public static int DEFAULT_USER_ID = 0;
 
-		// optional fields
-		private int id;
-		private String dob;
-		private String telephone;
-		private String address2;
+	@Id
+	@GeneratedValue
+	private int id;
 
-		public Builder(String email, String password, String firstname,
-				String lastname, String address1, String town, String postcode) {
-			this.email = email;
-			this.password = password;
-			this.firstname = firstname;
-			this.lastname = lastname;
-			this.address1 = address1;
-			this.town = town;
-			this.postcode = postcode;
+	@Column(nullable = false)
+	private String email;
 
-			this.id = DEFAULT_USER_ID;
-			this.dob = "";
-			this.telephone = "";
-			this.address2 = "";
-		}
+	@Column(nullable = false)
+	private String password;
 
-		public Builder id(int id) {
-			this.id = id;
-			return this;
-		}
+	@Column(nullable = false)
+	private String firstname;
 
-		public Builder dob(String dob) {
-			this.dob = dob;
-			return this;
-		}
+	@Column(nullable = false)
+	private String lastname;
 
-		public Builder telephone(String telephone) {
-			this.telephone = telephone;
-			return this;
-		}
+	private String dob;
 
-		public Builder address2(String address2) {
-			this.address2 = address2;
-			return this;
-		}
+	@Column(nullable = false)
+	private String telephone;
 
-		public User build() {
-			return new User(this);
-		}
+	@Column(nullable = false)
+	private String address1;
+
+	private String address2;
+
+	@Column(nullable = false)
+	private String town;
+
+	@Column(nullable = false)
+	private String postcode;
+
+	private boolean isAdmin;
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	List<Order> orders;
+
+	public User() {
+
 	}
 
-	private User(Builder builder) {
-		this.id = builder.id;
-		this.email = builder.email;
-		this.password = builder.password;
-		this.firstname = builder.firstname;
-		this.lastname = builder.lastname;
-		this.dob = builder.dob;
-		this.telephone = builder.telephone;
-		this.address1 = builder.address1;
-		this.address2 = builder.address2;
-		this.town = builder.town;
-		this.postcode = builder.postcode;
-	}
-
-	public User(int id, User other) {
+	public User(int id, String email, String password, String firstname,
+			String lastname, String dob, String telephone, String address1,
+			String address2, String town, String postcode, boolean isAdmin) {
+		super();
 		this.id = id;
-		this.email = other.email;
-		this.password = other.password;
-		this.firstname = other.firstname;
-		this.lastname = other.lastname;
-		this.dob = other.dob;
-		this.telephone = other.telephone;
-		this.address1 = other.address1;
-		this.address2 = other.address2;
-		this.town = other.town;
-		this.postcode = other.postcode;
+		this.email = email;
+		this.password = password;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.dob = dob;
+		this.telephone = telephone;
+		this.address1 = address1;
+		this.address2 = address2;
+		this.town = town;
+		this.postcode = postcode;
+		this.isAdmin = isAdmin;
+	}
+
+	public User(String email, String password, String firstname,
+			String lastname, String dob, String telephone, String address1,
+			String address2, String town, String postcode, boolean isAdmin) {
+		this(DEFAULT_USER_ID, email, password, firstname, lastname, dob,
+				telephone, address1, address2, town, postcode, isAdmin);
 	}
 
 	public int getId() {
@@ -145,38 +124,109 @@ public final class User {
 		return postcode;
 	}
 
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
 	@Override
 	public String toString() {
 		return String
-				.format("Id: %s, User: %s, Firstname: %s, Lastname: %s, Dob: %s, Telephone: %s, Address: %s %s %s %s ",
+				.format("Id: %s, User: %s, Firstname: %s, Lastname: %s, Dob: %s, Telephone: %s, Address: %s %s %s %s, isAdmin: %s ",
 						getId(), getEmail(), getFirstname(), getLastname(),
 						getDob(), getTelephone(), getAddress1(), getAddress2(),
-						getTown(), getPostcode());
+						getTown(), getPostcode(), isAdmin());
 	}
 
 	@Override
 	public int hashCode() {
+		int prime = 31;
 		int result = 1;
-		result += 37 * id;
-		result += 37 * this.getClass().hashCode();
-
+		result = prime * result
+				+ ((address1 == null) ? 0 : address1.hashCode());
+		result = prime * result
+				+ ((address2 == null) ? 0 : address2.hashCode());
+		result = prime * result + ((dob == null) ? 0 : dob.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result
+				+ ((firstname == null) ? 0 : firstname.hashCode());
+		result = prime * result + id;
+		result = prime * result + (isAdmin ? 1231 : 1237);
+		result = prime * result
+				+ ((lastname == null) ? 0 : lastname.hashCode());
+		result = prime * result
+				+ ((password == null) ? 0 : password.hashCode());
+		result = prime * result
+				+ ((postcode == null) ? 0 : postcode.hashCode());
+		result = prime * result
+				+ ((telephone == null) ? 0 : telephone.hashCode());
+		result = prime * result + ((town == null) ? 0 : town.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		if (other == this) {
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		}
-
-		if (other instanceof User) {
-			User otherUser = (User) other;
-			boolean isSameClass = this.getClass().equals(otherUser.getClass());
-
-			return (this.id == otherUser.id) && isSameClass;
-		}
-
-		return false;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (address1 == null) {
+			if (other.address1 != null)
+				return false;
+		} else if (!address1.equals(other.address1))
+			return false;
+		if (address2 == null) {
+			if (other.address2 != null)
+				return false;
+		} else if (!address2.equals(other.address2))
+			return false;
+		if (dob == null) {
+			if (other.dob != null)
+				return false;
+		} else if (!dob.equals(other.dob))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (firstname == null) {
+			if (other.firstname != null)
+				return false;
+		} else if (!firstname.equals(other.firstname))
+			return false;
+		if (id != other.id)
+			return false;
+		if (isAdmin != other.isAdmin)
+			return false;
+		if (lastname == null) {
+			if (other.lastname != null)
+				return false;
+		} else if (!lastname.equals(other.lastname))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (postcode == null) {
+			if (other.postcode != null)
+				return false;
+		} else if (!postcode.equals(other.postcode))
+			return false;
+		if (telephone == null) {
+			if (other.telephone != null)
+				return false;
+		} else if (!telephone.equals(other.telephone))
+			return false;
+		if (town == null) {
+			if (other.town != null)
+				return false;
+		} else if (!town.equals(other.town))
+			return false;
+		return true;
 	}
 
 }

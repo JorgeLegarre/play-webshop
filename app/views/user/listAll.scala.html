@@ -1,12 +1,12 @@
 @(users: List[models.User])
 
-@generalLookAndFeel("Showing users") {
+@generalLookAndFeel("Showing users", 3) {
 	N Users: @users.size()<br>
 	
 	<ul>
 		@for(user <- users){
 			<li>
-				<a href="/users/@user.getId">@user.getFirstname (@user.getEmail)</a>
+				<a href="/private/users/@user.getId">@user.getFirstname (@user.getEmail)</a>
 			</li>
 		}
 	</ul>

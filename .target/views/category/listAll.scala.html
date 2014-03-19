@@ -1,2 +1,16 @@
-@* listAll Template File *@
-@(param: Any)
+@(categories: List[models.Category])
+
+@generalLookAndFeel("Showing categories", 2) {
+
+	N Categories: @categories.size()<br>
+	
+	<ul>
+		@for(category <- categories){
+			<li>
+				<a href="/private/categories/@category.getId">@category.getName</a>
+			</li>
+		}
+	</ul>
+}
+
+

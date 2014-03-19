@@ -1,2 +1,18 @@
 @* upsert Template File *@
-@(param: Any)
+@(user: models.User)
+
+@generalLookAndFeel("Showing an user", 3) {
+	User<br>
+	---------------------------------<br>
+	id: @user.getId<br>
+	Email: @user.getEmail<br>
+	Name: @user.getFirstname<br>
+	LastName: @user.getLastname<br>
+	Date of birth: @user.getDob<br>
+	Telephone: @user.getTelephone<br>
+	Address: @user.getAddress1<br>
+	    c/o: @user.getAddress2<br>
+	Town: @user.getTown<br>
+	PostCode: @user.getPostcode<br>
+	IsAdmin: @user.isAdmin<br>
+}

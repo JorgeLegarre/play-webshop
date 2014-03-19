@@ -1,12 +1,12 @@
 @(products: List[models.Product])
 
-@generalLookAndFeel("Showing products") {
+@generalLookAndFeel("Showing products", 1) {
 	N Products: @products.size()<br>
 	
 	<ul>
 		@for(product <- products){
 			<li>
-				<a href="/products/@product.getId">@product.getName</a>
+				<a href="/private/products/@product.getId">@product.getName</a>
 			</li>
 		}
 	</ul>

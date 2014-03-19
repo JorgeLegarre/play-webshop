@@ -1,2 +1,14 @@
-@* listAll Template File *@
-@(param: Any)
+@(products: List[models.Product])
+
+@generalLookAndFeel("Showing products", 1) {
+	N Products: @products.size()<br>
+	
+	<ul>
+		@for(product <- products){
+			<li>
+				<a href="/private/products/@product.getId">@product.getName</a>
+			</li>
+		}
+	</ul>
+}
+

@@ -1,11 +1,33 @@
 package models;
 
-public final class Category {
-	public static final int DEFAULT_ID = -1;
+import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+@Entity
+public class Category {
+	public static int DEFAULT_ID = 0;
+
+	@Id
+	@GeneratedValue
 	private int id;
+
+	@Column(nullable = false)
 	private String name;
+
 	private int staff_responsible;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	private List<Product> products;
+
+	public Category() {
+
+	}
 
 	public Category(int id, String name, int staff_responsible) {
 		this.id = id;
@@ -25,12 +47,24 @@ public final class Category {
 		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public int getStaff_responsible() {
 		return staff_responsible;
+	}
+
+	public void setStaff_responsible(int staff_responsible) {
+		this.staff_responsible = staff_responsible;
 	}
 
 	@Override
@@ -49,6 +83,7 @@ public final class Category {
 		return false;
 	}
 
+	@Override
 	public String toString() {
 		return String.format("Id: %s, Name: %s, Straff_responsible: %s", id,
 				name, staff_responsible);

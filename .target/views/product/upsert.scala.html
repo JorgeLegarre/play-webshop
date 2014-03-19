@@ -1,2 +1,9 @@
-@* upsert Template File *@
-@(param: Any)
+@(product: models.Product)
+
+@generalLookAndFeel("Showing a product", 1) {
+	Product<br>
+	---------------------------------<br>
+	id: @product.getId<br>
+	Name: @product.getName<br>
+	price: @product.getCost<br>
+}

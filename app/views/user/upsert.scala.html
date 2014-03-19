@@ -1,7 +1,7 @@
 @* upsert Template File *@
 @(user: models.User)
 
-@generalLookAndFeel("Showing an user") {
+@generalLookAndFeel("Showing an user", 3) {
 	User<br>
 	---------------------------------<br>
 	id: @user.getId<br>
@@ -14,4 +14,5 @@
 	    c/o: @user.getAddress2<br>
 	Town: @user.getTown<br>
 	PostCode: @user.getPostcode<br>
+	IsAdmin: @user.isAdmin<br>
 }

@@ -1,108 +1,161 @@
 package models;
 
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+
 //I don't use inheritance from product because i
 // want to keep separate the concepts of 
 //product and orderdetail
-public final class OrderDetail {
-	public static final int DEFAULT_ORDER_ID = -1;
-	private final int orderId;
-	private final int productId;
-	private final String name;
-	private final String description;
-	private final double cost;
-	private final double rrp;
-	private final int quantity;
+@Entity
+public class OrderDetail {
+	@Embeddable
+	public static class Key implements Serializable {
 
-	public static class Builder {
-		// Required parameters
-		private final int productId;
-		private final double cost;
-		private final double rrp;
-		private final int quantity;
+		private static final long serialVersionUID = 20140318;
 
-		// optional parameters
 		private int orderId;
-		private String name;
-		private String description;
+		private int productId;
 
-		public Builder(int productId, double cost, double rrp, int quantity) {
-			this.productId = productId;
-			this.cost = cost;
-			this.rrp = rrp;
-			this.quantity = quantity;
-
-			this.orderId = DEFAULT_ORDER_ID;
-			this.name = "";
-			this.description = "";
-		}
-
-		public Builder orderId(int orderId) {
+		public Key(int orderId, int productId) {
 			this.orderId = orderId;
-			return this;
+			this.productId = productId;
 		}
 
-		public Builder description(String description) {
-			this.description = description;
-			return this;
+		public int getOrderId() {
+			return orderId;
 		}
 
-		public Builder name(String name) {
-			this.name = name;
-			return this;
+		public void setOrderId(int orderId) {
+			this.orderId = orderId;
 		}
 
-		public OrderDetail build() {
-			return new OrderDetail(this);
+		public int getProductId() {
+			return productId;
+		}
+
+		public void setProductId(int productId) {
+			this.productId = productId;
+		}
+
+		@Override
+		public int hashCode() {
+			int prime = 31;
+			int result = 1;
+			result = prime * result + orderId;
+			result = prime * result + productId;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Key other = (Key) obj;
+			if (orderId != other.orderId)
+				return false;
+			if (productId != other.productId)
+				return false;
+			return true;
 		}
 
 	}
 
-	private OrderDetail(Builder builder) {
-		this.orderId = builder.orderId;
-		this.productId = builder.productId;
-		this.name = builder.name;
-		this.description = builder.description;
-		this.cost = builder.cost;
-		this.rrp = builder.rrp;
-		this.quantity = builder.quantity;
+	@EmbeddedId
+	private Key id;
+
+	@ManyToOne
+	@MapsId("orderId")
+	private Order order;
+
+	@Column(nullable = false)
+	private String name;
+
+	private String description;
+
+	@Column(nullable = false)
+	private double cost;
+
+	@Column(nullable = false)
+	private double rrp;
+
+	@Column(nullable = false)
+	private int quantity;
+
+	public OrderDetail() {
 	}
 
-	public OrderDetail(int orderId, OrderDetail other) {
-		this.orderId = orderId;
-		this.productId = other.productId;
-		this.name = other.name;
-		this.description = other.description;
-		this.cost = other.cost;
-		this.rrp = other.rrp;
-		this.quantity = other.quantity;
+	public OrderDetail(int orderId, int productId, Order order, String name,
+			String description, double cost, double rrp, int quantity) {
+		super();
+		this.id = new Key(orderId, productId);
+		this.order = order;
+		this.name = name;
+		this.description = description;
+		this.cost = cost;
+		this.rrp = rrp;
+		this.quantity = quantity;
 	}
 
-	public int getOrderId() {
-		return orderId;
+	public int getOrder() {
+		return id.orderId;
 	}
 
 	public int getProductId() {
-		return productId;
+		return id.productId;
 	}
 
 	public String getName() {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getDescription() {
 		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public double getCost() {
 		return cost;
 	}
 
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
+
 	public double getRrp() {
 		return rrp;
 	}
 
+	public void setRrp(double rrp) {
+		this.rrp = rrp;
+	}
+
 	public int getQuantity() {
 		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 
 	public double getSubTotalCost() {
@@ -115,16 +168,16 @@ public final class OrderDetail {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		int prime = 31;
 		int result = 1;
 		long temp;
 		temp = Double.doubleToLongBits(cost);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + orderId;
-		result = prime * result + productId;
+		result = prime * result + ((order == null) ? 0 : order.hashCode());
 		result = prime * result + quantity;
 		temp = Double.doubleToLongBits(rrp);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -148,14 +201,20 @@ public final class OrderDetail {
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (orderId != other.orderId)
-			return false;
-		if (productId != other.productId)
+		if (order == null) {
+			if (other.order != null)
+				return false;
+		} else if (!order.equals(other.order))
 			return false;
 		if (quantity != other.quantity)
 			return false;
@@ -166,9 +225,10 @@ public final class OrderDetail {
 
 	@Override
 	public String toString() {
-		return "OrderDetail [orderId=" + orderId + ", productId=" + productId
-				+ ", name=" + name + ", description=" + description + ", cost="
-				+ cost + ", rrp=" + rrp + ", quantity=" + quantity + "]";
+		return "OrderDetail [order=" + id.orderId + ", productId="
+				+ id.productId + ", name=" + name + ", description="
+				+ description + ", cost=" + cost + ", rrp=" + rrp
+				+ ", quantity=" + quantity + "]";
 	}
 
 }
