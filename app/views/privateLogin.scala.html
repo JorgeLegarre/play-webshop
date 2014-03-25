@@ -14,19 +14,19 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" href="/assets/css/main.min.css">
-    <link rel="stylesheet" href="/assets/css/signin.css">
+    <link rel="stylesheet" href="@routes.Assets.at("css/main.min.css")">
+    <link rel="stylesheet" href='@routes.Assets.at("css/signin.css")'>
   </head>
 
   <body>
 
     <div class="container">
-	   <form class="form-signin" role="form" method="POST" action="/private/login">
+	   <form class="form-signin" role="form" method="POST" action="@routes.ApplicationController.login">
 		    <h2 class="form-signin-heading">Please sign in</h2>
-	        @if(error == true) {
+		    @if(error == true) {
 				<p class="invalid">Invalid username or password.</p>
 			}
-	        <input type="email" name="email" class="form-control" placeholder="Email address" required autofocus>
+			<input type="email" name="email" class="form-control" placeholder="Email address" required autofocus>
 	        <input type="password" name="password" class="form-control" placeholder="Password" required>
 	        
 	        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>

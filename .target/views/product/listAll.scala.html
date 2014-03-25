@@ -12,7 +12,7 @@
 					<td>Description</td>
 					<td>Cost</td>
 					<td>Rrp</td>
-					<td><span><i class="glyphicon glyphicon-plus"></i></span></td>
+					<td><span><a href="@routes.ProductController.addProduct()" data-toggle="tooltip" data-placement="top" title="New Product"><i class="glyphicon glyphicon-plus"></i></a></span></td>
 				</tr>
 			</thead>
 			<tbody>
@@ -23,12 +23,23 @@
 						<td>@product.getDescription</td>
 						<td>@product.getCost</td>
 						<td>@product.getRrp</td>
-						<td><a href="/private/products/@product.getId"><i class="glyphicon glyphicon-eye-open"></i></a>
-							<i class="glyphicon glyphicon-pencil"></i>
-							<i class="glyphicon glyphicon-remove"></i>
+						<td>
+							<a href="@routes.ProductController.showOneProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="View details">
+								<i class="glyphicon glyphicon-eye-open"></i>
+							</a>
+							<a href="@routes.ProductController.editProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
+							<a href="@routes.ProductController.deleteProduct(product.getId)"  data-toggle="confirmation" data-placement="top" data-original-title title>
+								<i class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="right" title="Delete"></i>
+							</a>
 						</td>
 					</tr>
 				}
+				<script type="text/javascript">
+				$(function(){
+					$('[data-toggle="confirmation"]').confirmation({singleton:true});
+					$('[data-toggle="tooltip"]').tooltip();
+				});
+				</script>
 			</tbody>
 		</table>
 	</div>

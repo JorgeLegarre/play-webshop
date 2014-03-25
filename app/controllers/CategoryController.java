@@ -13,14 +13,6 @@ import views.html.category.upsert;
 public class CategoryController extends Controller {
 
 	@Transactional
-	public static void fillDB() {
-		JPA.em().persist(new Category("Books", 1));
-		JPA.em().persist(new Category("Films", 2));
-		JPA.em().persist(new Category("Games", 3));
-
-	}
-
-	@Transactional
 	public static Result showOneCategory(int id) {
 		Category category = getOneCategory(id);
 
@@ -39,12 +31,7 @@ public class CategoryController extends Controller {
 	}
 
 	private static Category getOneCategory(int id) {
-		List<Category> categories = JPA
-				.em()
-				.createQuery("SELECT c from Category c WHERE c.id = :id",
-						Category.class).setParameter("id", id).getResultList();
-
-		return (categories.size() > 0) ? categories.get(0) : null;
+		return JPA.em().find(Category.class, id);
 	}
 
 	private static List<Category> getAllCategories() {

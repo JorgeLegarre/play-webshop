@@ -4,13 +4,27 @@
 <html><head>
 	<meta charset="utf-8">
 	<title>@title</title>
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/assets/css/main.min.css">
-	<link rel="stylesheet" href="/assets/css/bootstrap-duallistbox.css">
-	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	
+	<!-- Bootstrap -->
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script> -->
+	
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-	<script src="/assets/js/jquery.bootstrap-duallistbox.js"></script>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	
+	<!-- bootstrap multiselect -->
+	<script type="text/javascript" src='@routes.Assets.at("js/bootstrap-multiselect.min.js")'></script>
+	<link rel="stylesheet" href='@routes.Assets.at("css/bootstrap-multiselect.min.css")' type="text/css"/>
+	
+	<!-- bootstrap confirmation -->
+	<script type="text/javascript" src='@routes.Assets.at("js/bootstrap-tooltip.min.js")'></script>
+	<script type="text/javascript" src='@routes.Assets.at("js/bootstrap-confirmation.min.js")'></script>
+	
+	<!-- internal -->
+	<link rel="stylesheet" href='@routes.Assets.at("css/main.min.css")'>
+	<script type="text/javascript" src='@routes.Assets.at("js/form.min.js")'></script>
+	
 </head><body>
 	@navBar(active)
 	<div class="container">

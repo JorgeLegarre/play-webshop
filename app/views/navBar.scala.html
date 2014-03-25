@@ -39,10 +39,10 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">@session.get("user") <b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">@session.get("username") <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Log out</a></li>
+            <li><a href='@routes.UserController.showCurrentUser()'>Profile</a></li>
+            <li><a href="@routes.ApplicationController.logOut()">Log out</a></li>
           </ul>
         </li>
       </ul>

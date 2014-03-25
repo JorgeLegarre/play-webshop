@@ -3,12 +3,11 @@
 # ~~~~
 
 # PRIVATE
-# init DB
-GET 	/init							 	       	controllers.ApplicationController.init()
-
 # login
 GET 	/private						  		   	controllers.ApplicationController.showLogin()
+GET 	/private/						  		   	controllers.ApplicationController.showLogin()
 POST 	/private/login					  		   	controllers.ApplicationController.login()
+GET 	/private/logout					  		   	controllers.ApplicationController.logOut()
 
 # main menu
 GET 	/private/mainMenu					  	   	controllers.ApplicationController.mainMenu()
@@ -16,7 +15,16 @@ GET 	/private/mainMenu					  	   	controllers.ApplicationController.mainMenu()
 # producs
 GET     /private/products                          	controllers.ProductController.listAllProducts()
 GET     /private/products/                         	controllers.ProductController.listAllProducts()
-GET     /private/products/:id                      	controllers.ProductController.showOneProduct(id : Int)
+
+GET     /private/products/add            			controllers.ProductController.addProduct()
+
+GET     /private/products/:id            			controllers.ProductController.showOneProduct(id : Int)
+
+GET     /private/products/:id/edit            		controllers.ProductController.editProduct(id : Int)
+
+GET     /private/products/:id/delete           		controllers.ProductController.deleteProduct(id : Int)
+
+POST	/private/products/save						controllers.ProductController.saveProduct()
 
 #category
 GET     /private/categories                        	controllers.CategoryController.listAllCategories()
@@ -26,7 +34,9 @@ GET     /private/categories/:id                    	controllers.CategoryControll
 #user
 GET     /private/users                        	   	controllers.UserController.listAllUsers()
 GET     /private/users/                        	   	controllers.UserController.listAllUsers()
+GET     /private/users/currentUser                  controllers.UserController.showCurrentUser()
 GET     /private/users/:id                         	controllers.UserController.showOneUser(id : Int)
+
 
 #order
 GET     /private/orders                        	   	controllers.OrderController.listAllOrders()

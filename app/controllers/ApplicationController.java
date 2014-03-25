@@ -1,23 +1,19 @@
 package controllers;
 
+import java.util.List;
+
+import models.User;
 import play.data.Form;
+import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import views.html.mainMenu;
 import views.html.privateLogin;
-import forms.SignIn;
+import forms.SignInForm;
 
 public class ApplicationController extends Controller {
-
-	@Transactional
-	public static Result init() {
-		CategoryController.fillDB();
-		ProductController.fillDB();
-		UserController.fillDB();
-
-		return redirect("/private");
-	}
 
 	public static Result show404(String requestedUri) {
 		return notFound("The url (" + requestedUri + ") is not know to us!! ");
@@ -27,32 +23,48 @@ public class ApplicationController extends Controller {
 		return ok(privateLogin.render(false));
 	}
 
+	@Transactional
 	public static Result login() {
+		// this work in GET, in POST I have to test
+		// Map<String,String[]> from = request().body().asFormUrlEncoded()
+		// String email = form.get("email)[0];
 
 		// DynamicForm requestData = Form.form().bindFromRequest();
 		// String email = requestData.get("email");
 		// String pwd = requestData.get("password");
 
-		Form<SignIn> signInForm = Form.form(SignIn.class);
-		SignIn signIn = signInForm.bindFromRequest().get();
+		Form<SignInForm> signInForm = Form.form(SignInForm.class);
+		SignInForm signIn = signInForm.bindFromRequest().get();
 
-		String email = signIn.email;
-		String pwd = signIn.password;
+		User user = getUser(signIn.email, signIn.password);
 
-		if (validate(email, pwd)) {
-			session("user", email);
-			return redirect("/private/mainMenu");
+		if (user != null) {
+			session().put("username", user.getEmail());
+			session().put("userId", String.valueOf(user.getId()));
+			return redirect(routes.ApplicationController.mainMenu());
 		}
 
 		return ok(privateLogin.render(true));
 	}
 
+	@Security.Authenticated
 	public static Result mainMenu() {
 		return ok(mainMenu.render());
 	}
 
-	private static boolean validate(String email, String password) {
-		return "enkidugan@gmail.com".equals(email)
-				&& "password".equals(password);
+	public static Result logOut() {
+		session().clear();
+		return redirect(routes.ApplicationController.showLogin());
+	}
+
+	private static User getUser(String email, String password) {
+		List<User> result = JPA
+				.em()
+				.createQuery(
+						"SELECT u from User u where email=:email and password=:password",
+						User.class).setParameter("email", email)
+				.setParameter("password", password).getResultList();
+
+		return result.size() > 0 ? result.get(0) : null;
 	}
 }

@@ -11,20 +11,15 @@ import views.html.user.listAll;
 import views.html.user.upsert;
 
 public class UserController extends Controller {
-	@Transactional
-	public static void fillDB() {
-		JPA.em().persist(
-				new User("enkidugan@gmail.com", "password", "Jorge", "Legarre",
-						"1981-12-11", "0735560243", "Dalbobranten 12", "",
-						"Sköndal", "12868", true));
-		JPA.em().persist(
-				new User("mail2@gmail.com", "password2", "Björn", "Göransson",
-						"1980-06-06", "0735555555", "Ingen aning", "",
-						"Stockholm", "12331", false));
-	}
 
 	@Transactional
-	public static Result showOneUser(int id) {
+	public static Result showCurrentUser() {
+		int id = Integer.parseInt(session().get("userId"));
+		return showUser(id);
+
+	}
+
+	private static Result showUser(int id) {
 		User user = getOneUser(id);
 
 		if (user == null) {
@@ -35,18 +30,18 @@ public class UserController extends Controller {
 	}
 
 	@Transactional
+	public static Result showOneUser(int id) {
+		return showUser(id);
+	}
+
+	@Transactional
 	public static Result listAllUsers() {
 		List<User> users = getAllUsers();
 		return ok(listAll.render(users));
 	}
 
 	private static User getOneUser(int id) {
-		List<User> users = JPA
-				.em()
-				.createQuery("SELECT u from User u WHERE u.id = :id",
-						User.class).setParameter("id", id).getResultList();
-
-		return (users.size() > 0) ? users.get(0) : null;
+		return JPA.em().find(User.class, id);
 	}
 
 	private static List<User> getAllUsers() {
