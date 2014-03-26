@@ -7,8 +7,8 @@ import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.user.listAll;
-import views.html.user.upsert;
+import views.html.privat.user.listAll;
+import views.html.privat.user.upsert;
 
 public class UserController extends Controller {
 

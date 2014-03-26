@@ -12,8 +12,8 @@ import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.product.listAll;
-import views.html.product.upsert;
+import views.html.privat.product.listAll;
+import views.html.privat.product.upsert;
 import forms.ProductForm;
 
 public final class ProductController extends Controller {

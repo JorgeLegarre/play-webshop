@@ -7,8 +7,8 @@ import models.Order;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.order.listAll;
-import views.html.order.upsert;
+import views.html.privat.order.listAll;
+import views.html.privat.order.upsert;
 
 public final class OrderController extends Controller {
 	/*

@@ -10,7 +10,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.mainMenu;
-import views.html.privateLogin;
+import views.html.privat.privateLogin;
 import forms.SignInForm;
 
 public class ApplicationController extends Controller {

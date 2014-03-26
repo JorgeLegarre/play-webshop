@@ -7,8 +7,8 @@ import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.category.listAll;
-import views.html.category.upsert;
+import views.html.privat.category.listAll;
+import views.html.privat.category.upsert;
 
 public class CategoryController extends Controller {
 
