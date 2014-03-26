@@ -47,6 +47,8 @@ public class ApplicationController extends Controller {
 			return redirect(routes.ApplicationController.mainMenu());
 		}
 
+		flash().put("incorrectSignIn", "yes");
+
 		return ok(privateLogin.render(true));
 	}
 

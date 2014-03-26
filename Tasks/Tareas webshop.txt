@@ -1,30 +1,43 @@
--Acabar la doble lista
--Aplicar estilos a todos los formularios
--Implementar order formular
--Login interceptors
--Usuario rellenar si es admin o no
+Formas de leer en un controller la info POST de un formulario
+//Forma 1 --> leer el campo directo
+Map<String,String[]> from = request().body().asFormUrlEncoded()
+String email = form.get("email)[0];
 
--Crear parte publica usuario
-    -Uso sin login
-    -Añadir carro sin login
-    -Pedido(sin login) --> preguntar login o dar de alta usuario
+//Forma 2
+DynamicForm requestData = Form.form().bindFromRequest();
+String email = requestData.get("email");
+String pwd = requestData.get("password");
 
-    -Uso con login
-    -Añadir carro con login
-    -Pedido(directo)
+//Forma 3 --> Siendo SignInForm un formulario creado por nosotros
+Form<SignInForm> signInForm = Form.form(SignInForm.class);
+SignInForm signIn = signInForm.bindFromRequest().get();
+User user = getUser(signIn.email, signIn.password);   
+
+--------
 
 //actions de forms
 <form class="form-signin" role="form" method="POST" action="@routes.ApplicationController.login">
 
+----------
+
 //css, javascript, images
 <link rel="stylesheet" href="@routes.Assets.at("css/main.min.css")">
+
+-----------
 
 //conroller
 return redirect(routes.ApplicationController.mainMenu());
 
+-----------
 
 //insertar en BBDD    
 JPA.em().persist(student)
 
 //find by primary key
 Teacher teacher = JPA.em().find(Teacher.class, teacherId);
+
+---------------
+
+//Poner STRING en session o flash(equivalente a request)
+session().put("","")
+flash().put("","")
