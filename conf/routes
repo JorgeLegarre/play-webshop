@@ -4,10 +4,10 @@
 
 # PRIVATE
 # login
-GET 	/private						  		   	controllers.ApplicationController.showLogin()
-GET 	/private/						  		   	controllers.ApplicationController.showLogin()
-POST 	/private/login					  		   	controllers.ApplicationController.login()
-GET 	/private/logout					  		   	controllers.ApplicationController.logOut()
+GET 	/private						  		   	controllers.SignInController.showLogin()
+GET 	/private/						  		   	controllers.SignInController.showLogin()
+POST 	/private/login					  		   	controllers.SignInController.login()
+GET 	/private/logout					  		   	controllers.SignInController.logOut()
 
 # main menu
 GET 	/private/mainMenu					  	   	controllers.ApplicationController.mainMenu()

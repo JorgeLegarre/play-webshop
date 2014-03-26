@@ -1,4 +1,4 @@
-@(error : Boolean)
+@()
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,9 +21,9 @@
   <body>
 
     <div class="container">
-	   <form class="form-signin" role="form" method="POST" action="@routes.ApplicationController.login">
+	   <form class="form-signin" role="form" method="POST" action="@routes.SignInController.login">
 		    <h2 class="form-signin-heading">Please sign in</h2>
-		    @if(error == true) {
+		    @if(flash.containsKey("invalid")) {
 				<p class="invalid">Invalid username or password.</p>
 			}
 			<input type="email" name="email" class="form-control" placeholder="Email address" required autofocus>
