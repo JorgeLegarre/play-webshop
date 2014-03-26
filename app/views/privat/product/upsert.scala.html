@@ -11,7 +11,7 @@
 		@if(edit){
 			<i class="glyphicon glyphicon-pencil yellow"></i>
 		}else{
-			<a href="@routes.ProductController.editProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="Edit">
+			<a href="@routes.ProductController.showEditProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="Edit">
 				<i class="glyphicon glyphicon-lock yellow" data-toggle="tooltip" data-placement="top" title="Edit"></i>
 			</a>
 		}

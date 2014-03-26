@@ -16,13 +16,13 @@ GET 	/private/mainMenu					  	   	controllers.ApplicationController.mainMenu()
 GET     /private/products                          	controllers.ProductController.listAllProducts()
 GET     /private/products/                         	controllers.ProductController.listAllProducts()
 
-GET     /private/products/add            			controllers.ProductController.addProduct()
+GET     /private/products/add            			controllers.ProductController.showAddProduct()
 
 GET     /private/products/:id            			controllers.ProductController.showOneProduct(id : Int)
 
-GET     /private/products/:id/edit            		controllers.ProductController.editProduct(id : Int)
+GET     /private/products/:id/edit            		controllers.ProductController.showEditProduct(id : Int)
 
-GET     /private/products/:id/delete           		controllers.ProductController.deleteProduct(id : Int)
+POST    /private/products/delete           			controllers.ProductController.deleteProduct()
 
 POST	/private/products/save						controllers.ProductController.saveProduct()
 

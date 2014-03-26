@@ -12,7 +12,7 @@
 					<td>Description</td>
 					<td>Cost</td>
 					<td>Rrp</td>
-					<td><span><a href="@routes.ProductController.addProduct()" data-toggle="tooltip" data-placement="top" title="New Product"><i class="glyphicon glyphicon-plus"></i></a></span></td>
+					<td><span><a href="@routes.ProductController.showAddProduct()" data-toggle="tooltip" data-placement="top" title="New Product"><i class="glyphicon glyphicon-plus"></i></a></span></td>
 				</tr>
 			</thead>
 			<tbody>
@@ -27,14 +27,22 @@
 							<a href="@routes.ProductController.showOneProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="View details">
 								<i class="glyphicon glyphicon-eye-open"></i>
 							</a>
-							<a href="@routes.ProductController.editProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
-							<a href="@routes.ProductController.deleteProduct(product.getId)"  data-toggle="confirmation" data-placement="top" data-original-title title>
+							<a href="@routes.ProductController.showEditProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
+							<a href="javascript:del(@product.getId)" id="submit"  data-toggle="confirmation" data-placement="top" data-original-title title>
 								<i class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="right" title="Delete"></i>
 							</a>
 						</td>
 					</tr>
 				}
+				<form method="POST" id="delForm" action="@routes.ProductController.deleteProduct()">
+					<input type="hidden" id="productId" name="productId" value=""/>
+				</form>
 				<script type="text/javascript">
+				function del(id){
+					$("#productId").val(id);
+					$("#delForm").submit();
+				}
+				
 				$(function(){
 					$('[data-toggle="confirmation"]').confirmation({singleton:true});
 					$('[data-toggle="tooltip"]').tooltip();

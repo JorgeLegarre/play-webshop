@@ -1,0 +1,30 @@
+-Acabar la doble lista
+-Aplicar estilos a todos los formularios
+-Implementar order formular
+-Login interceptors
+-Usuario rellenar si es admin o no
+
+-Crear parte publica usuario
+    -Uso sin login
+    -Añadir carro sin login
+    -Pedido(sin login) --> preguntar login o dar de alta usuario
+
+    -Uso con login
+    -Añadir carro con login
+    -Pedido(directo)
+
+//actions de forms
+<form class="form-signin" role="form" method="POST" action="@routes.ApplicationController.login">
+
+//css, javascript, images
+<link rel="stylesheet" href="@routes.Assets.at("css/main.min.css")">
+
+//conroller
+return redirect(routes.ApplicationController.mainMenu());
+
+
+//insertar en BBDD    
+JPA.em().persist(student)
+
+//find by primary key
+Teacher teacher = JPA.em().find(Teacher.class, teacherId);

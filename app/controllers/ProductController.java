@@ -28,7 +28,7 @@ public final class ProductController extends Controller {
 
 	@Transactional
 	@Security.Authenticated
-	public static Result addProduct() {
+	public static Result showAddProduct() {
 		Product product = new Product();
 		List<Category> categories = getAllCategories();
 
@@ -38,37 +38,34 @@ public final class ProductController extends Controller {
 	@Transactional
 	@Security.Authenticated
 	public static Result showOneProduct(int id) {
-
 		return showProduct(id, false);
-	}
-
-	private static Result showProduct(int id, boolean edit) {
-		Product product = getOneProduct(id);
-		List<Category> categories = getAllCategories();
-
-		if (product == null) {
-			return notFound("Product not found");
-		}
-
-		return ok(upsert.render(product, categories, edit));
 	}
 
 	@Transactional
 	@Security.Authenticated
-	public static Result editProduct(int id) {
+	public static Result showEditProduct(int id) {
 		return showProduct(id, true);
 	}
 
 	@Transactional
 	@Security.Authenticated
-	public static Result deleteProduct(int id) {
-		Product product = getOneProduct(id);
+	public static Result deleteProduct() {
+		Map<String, String[]> parameters = request().body().asFormUrlEncoded();
+		String[] productId = parameters.get("productId");
 
-		if (product != null) {
-			JPA.em().remove(product);
+		if (productId != null && productId.length > 0) {
+			int id = Integer.parseInt(productId[0]);
+
+			Product product = getOneProduct(id);
+
+			if (product != null) {
+				JPA.em().remove(product);
+			}
+
+			return redirect(routes.ProductController.listAllProducts());
 		}
 
-		return redirect(routes.ProductController.listAllProducts());
+		return badRequest("Product unknow");
 	}
 
 	@Transactional
@@ -86,6 +83,17 @@ public final class ProductController extends Controller {
 		}
 
 		return redirect(routes.ProductController.listAllProducts());
+	}
+
+	private static Result showProduct(int id, boolean edit) {
+		Product product = getOneProduct(id);
+		List<Category> categories = getAllCategories();
+
+		if (product == null) {
+			return notFound("Product not found");
+		}
+
+		return ok(upsert.render(product, categories, edit));
 	}
 
 	private static List<Integer> readCategories() {

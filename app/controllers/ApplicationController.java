@@ -20,6 +20,9 @@ public class ApplicationController extends Controller {
 	}
 
 	public static Result showLogin() {
+		if (session().get("username") != null) {
+			return redirect(routes.ApplicationController.mainMenu());
+		}
 		return ok(privateLogin.render(false));
 	}
 
