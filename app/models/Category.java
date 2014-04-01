@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -26,7 +27,7 @@ public class Category {
 	private List<Product> products;
 
 	public Category() {
-
+		products = new ArrayList<>();
 	}
 
 	public Category(int id, String name) {
@@ -36,10 +37,6 @@ public class Category {
 
 	public Category(String name) {
 		this(DEFAULT_ID, name);
-	}
-
-	public Category(int id, Category other) {
-		this(id, other.name);
 	}
 
 	public int getId() {

@@ -74,8 +74,12 @@ public class CategoryController extends Controller {
 
 		Category categoryForm = parseForm(autoForm);
 
-		Category category = getOneCategory(categoryForm.getId());
-		category.setName(categoryForm.getName());
+		if (categoryForm.getId() != Category.DEFAULT_ID) {
+			Category category = getOneCategory(categoryForm.getId());
+			category.setName(categoryForm.getName());
+		} else {
+			JPA.em().persist(new Category(categoryForm.getName()));
+		}
 		// We dont read products so we cant use merge (it erase them)
 		// JPA.em().merge(category);
 
