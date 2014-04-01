@@ -3,7 +3,7 @@ package controllers;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.mainMenu;
+import views.html.privat.privateMainMenu;
 
 public class ApplicationController extends Controller {
 
@@ -13,6 +13,7 @@ public class ApplicationController extends Controller {
 
 	@Security.Authenticated
 	public static Result mainMenu() {
-		return ok(mainMenu.render());
+
+		return ok(privateMainMenu.render());
 	}
 }

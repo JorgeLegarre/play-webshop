@@ -14,14 +14,14 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" href="@routes.Assets.at("css/main.min.css")">
+    <link rel="stylesheet" href="@routes.Assets.at("css/privateMain.min.css")">
     <link rel="stylesheet" href='@routes.Assets.at("css/signin.css")'>
   </head>
 
   <body>
-
     <div class="container">
-	   <form class="form-signin" role="form" method="POST" action="@routes.SignInController.privateLogin">
+    	<form class="form-signin" role="form" method="POST" action="@routes.SignInController.privateLogin">
+			<h1 class="green">Webshop management</h1>	   		
 		    <h2 class="form-signin-heading">Please sign in</h2>
 		    @if(flash.containsKey("invalid")) {
 				<p class="invalid">Invalid username or password.</p>
