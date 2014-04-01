@@ -21,4 +21,5 @@ dist
 .target/forms
 .target/models
 .target/views
-
+.cache
+/app/views/.DS_Store
