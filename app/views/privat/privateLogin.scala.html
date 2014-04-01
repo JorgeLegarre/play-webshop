@@ -21,7 +21,7 @@
   <body>
 
     <div class="container">
-	   <form class="form-signin" role="form" method="POST" action="@routes.SignInController.login">
+	   <form class="form-signin" role="form" method="POST" action="@routes.SignInController.privateLogin">
 		    <h2 class="form-signin-heading">Please sign in</h2>
 		    @if(flash.containsKey("invalid")) {
 				<p class="invalid">Invalid username or password.</p>

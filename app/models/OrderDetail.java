@@ -9,9 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 
-//I don't use inheritance from product because i
-// want to keep separate the concepts of 
-//product and orderdetail
 @Entity
 public class OrderDetail {
 	@Embeddable
@@ -21,6 +18,9 @@ public class OrderDetail {
 
 		private int orderId;
 		private int productId;
+
+		public Key() {
+		}
 
 		public Key(int orderId, int productId) {
 			this.orderId = orderId;
@@ -80,8 +80,6 @@ public class OrderDetail {
 	@Column(nullable = false)
 	private String name;
 
-	private String description;
-
 	@Column(nullable = false)
 	private double cost;
 
@@ -94,24 +92,31 @@ public class OrderDetail {
 	public OrderDetail() {
 	}
 
-	public OrderDetail(int orderId, int productId, Order order, String name,
-			String description, double cost, double rrp, int quantity) {
+	public OrderDetail(Order order, int productId, String name, double cost,
+			double rrp, int quantity) {
 		super();
-		this.id = new Key(orderId, productId);
+		this.id = new Key(order.getId(), productId);
 		this.order = order;
 		this.name = name;
-		this.description = description;
 		this.cost = cost;
 		this.rrp = rrp;
 		this.quantity = quantity;
 	}
 
-	public int getOrder() {
-		return id.orderId;
+	public Key getId() {
+		return id;
 	}
 
-	public int getProductId() {
-		return id.productId;
+	public void setId(Key id) {
+		this.id = id;
+	}
+
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 
 	public String getName() {
@@ -120,14 +125,6 @@ public class OrderDetail {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public double getCost() {
@@ -154,33 +151,19 @@ public class OrderDetail {
 		this.quantity = quantity;
 	}
 
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-
 	public double getSubTotalCost() {
-		return cost * quantity;
+		return quantity * cost;
 	}
 
 	public double getSubTotalRrp() {
-		return rrp * quantity;
+		return quantity * rrp;
 	}
 
 	@Override
 	public int hashCode() {
-		int prime = 31;
+		final int prime = 31;
 		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(cost);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result
-				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((order == null) ? 0 : order.hashCode());
-		result = prime * result + quantity;
-		temp = Double.doubleToLongBits(rrp);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -193,42 +176,19 @@ public class OrderDetail {
 		if (getClass() != obj.getClass())
 			return false;
 		OrderDetail other = (OrderDetail) obj;
-		if (Double.doubleToLongBits(cost) != Double
-				.doubleToLongBits(other.cost))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (order == null) {
-			if (other.order != null)
-				return false;
-		} else if (!order.equals(other.order))
-			return false;
-		if (quantity != other.quantity)
-			return false;
-		if (Double.doubleToLongBits(rrp) != Double.doubleToLongBits(other.rrp))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "OrderDetail [order=" + id.orderId + ", productId="
-				+ id.productId + ", name=" + name + ", description="
-				+ description + ", cost=" + cost + ", rrp=" + rrp
-				+ ", quantity=" + quantity + "]";
+		return "OrderDetail [id=" + id + ", order=" + order + ", name=" + name
+				+ ", cost=" + cost + ", rrp=" + rrp + ", quantity=" + quantity
+				+ "]";
 	}
 
 }

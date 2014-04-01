@@ -15,4 +15,6 @@ libraryDependencies += "org.hibernate" % "hibernate-entitymanager" % "4.2.8.Fina
 
 libraryDependencies += "mysql" % "mysql-connector-java" % "3.+"
 
+libraryDependencies += "com.googlecode.json-simple" % "json-simple" % "1.+"
+
 play.Project.playJavaSettings

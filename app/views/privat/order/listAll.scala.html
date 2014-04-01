@@ -1,14 +1,43 @@
 @(orders: List[models.Order])
 
 @generalLookAndFeel("Showing orders", 4) {
-	N Orders: @orders.size()<br>
-	
-	<ul>
-		@for(order <- orders){
-			<li>
-				<a href="/private/orders/@order.getId">@order.getId - @order.getDate</a>
-			</li>
-		}
-	</ul>
+		<h2>Orders</h2>
+		<div class="generalTableHeight">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td>Id</td>
+						<td>User</td>
+						<td>Date</td>
+						<td>Status</td>
+						<td>Total Cost</td>
+						<td>Total Rrp</td>
+						<td  class="tableIconCRUDFixSize">&nbsp;</td>
+					</tr>
+				</thead>
+				<tbody>
+					@for(order <- orders){
+						<tr>
+							<td>@order.getId</td>
+							<td>@order.getUser.getEmail</td>
+							<td>@order.getDateString</td>
+							<td>@order.getStatus.getDescription</td>
+							<td>@order.getTotalCost</td>
+							<td>@order.getTotalRrp</td>
+							<td>
+								<a href="@routes.OrderController.showOneOrder(order.getId)" data-toggle="tooltip" data-placement="top" title="View details">
+									<i class="glyphicon glyphicon-eye-open"></i>
+								</a>
+								<a href="@routes.OrderController.showEditOrder(order.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
+							</td>
+						</tr>
+					}
+					<script type="text/javascript">
+						$(function(){
+							$('[data-toggle="tooltip"]').tooltip();
+						});
+					</script>
+				</tbody>
+			</table>
+		</div>
 }
-

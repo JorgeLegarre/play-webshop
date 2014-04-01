@@ -1,52 +1,186 @@
-@* upsert Template File *@
-@(order: models.Order)
+@(order: models.Order, allStatus :List[OrderStatus], users :List[User])
 
 @generalLookAndFeel("Showing an order", 4) {
-	Order<br>
-	---------------------------------<br>
-	id: @order.getId<br>
-	User id: @order.getUser.getId<br>
-	Date: @order.getDate<br>
-	<br>
-	Order details<br>
-	---------------------------------<br>
-	<table>
-		<thead>
-			<tr>
-				<th>Product id</th>
-				<th>Product name</th>
-				<th>Quantity</th>
-				<th>Unit price</th>
-				<th>Subtotal</th>
-			</tr>
-		</thead>
-		<tbody>
-			@*@for(detail <- order.getOrderDetails){
-				<tr>
-					<td>
-						@detail.getProductId
-					</td>
-					<td>
-						@detail.getName
-					</td>
-					<td>
-						@detail.getQuantity
-					</td>
-					<td>
-						@detail.getRrp
-					</td>
-					<td>
-						@detail.getSubTotalRrp
-					</td>
-				</tr>
-			} 
-			*@
-		</tbody>
-		<tfoot>
-	    <tr>
-	      <td colspan="4">Total</td>
-	      <td>@*@order.getTotalRRP*@</td>
-	    </tr>
-	  </tfoot>
-	</table>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2">
+				<h2>Order</h2>
+			</div>
+			<div class="col-md-6">
+				<div class="pull-right">
+					<div id="editPencil">
+						<i id="editModeIcon" class="glyphicon glyphicon-pencil yellow"></i>
+						<a id="viewModeIcon" href="#" data-toggle="tooltip" data-placement="top" title="Edit">
+							<i class="glyphicon glyphicon-lock yellow" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+						</a>
+						<script type="text/javascript">
+							$(function(){
+								$('[data-toggle="tooltip"]').tooltip();
+								 $("#viewModeIcon").click(function () {     
+							        	editModeForm();
+							        	return false;
+							        });
+							});
+						</script>
+					</div>
+				</div>
+			</div>
+		</div>
+		<form role="form" id="form" method="POST" action="@routes.OrderController.saveOrder()">
+			<input type="hidden" name="id" value="@order.getId"></input>
+			<input type="hidden" name="userId" value="@order.getUser.getId"></input>
+			<input type="hidden" name="date" value="@order.getDateString"></input>
+			<div class="row">
+				<div class="col-md-2">
+					<label>Id:</label>
+					<div>
+						@order.getId
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label for="dob">Date:</label>
+						<div>
+							@order.getDateString
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="status">Status:</label>
+						<div id="editStatus">
+							<select name="status">
+								@for(status <- allStatus){
+									<option value="@status.getId" @if(status.getId == order.getStatus.getId){selected}>@status.getDescription</option>
+								}
+							</select>
+						</div>
+						<div id="viewStatus" class="green">
+							@order.getStatus.getDescription
+						</div>
+					</div>
+				</div>
+			</div>	
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label for="user">User:</label>
+						<div>
+							<a href="@routes.UserController.showOneUser(order.getUser.getId)" data-toggle="tooltip" data-placement="top" title="View user">
+								@order.getUser.getFirstname&nbsp;@order.getUser.getLastname&nbsp;(@order.getUser.getEmail)
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8">
+					Order details
+					<div id="table" class="reducedTableHeight">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<td>Product Id</td>
+									<td>Product Name</td>
+									<td>Quantity<br><span id="info" class="hideClass red">(0 to delete)</span></td>
+									<td>Unit Cost</td>
+									<td>Unit Rrp</td>
+									<td>Subtotal cost</td>
+									<td>Subtotal Rrp</td>
+								</tr>
+							</thead>
+							<tbody>
+								@for(orderDetail <- order.getOrderDetails){
+									<tr>
+										<td>@orderDetail.getId.getProductId</td>
+										<td>@orderDetail.getName</td>
+										<td>
+											<div class="view">
+												@orderDetail.getQuantity
+											</div>
+											<div class="edit">
+												<input type="text" class="form-control" name="quantity" placeholder="0" value="@orderDetail.getQuantity">
+											</div>
+										</td>
+										<td>
+											<div class="view">
+												@orderDetail.getCost
+											</div>
+											<div class="edit">
+												<input type="number" class="form-control" name="cost" placeholder="0" min="0" value="@orderDetail.getCost">
+											</div>
+										</td>
+										<td>
+											<div class="view">
+												@orderDetail.getRrp
+											</div>
+											<div class="edit">
+												<input type="number" class="form-control" name="rrp" placeholder="0" min="0" value="@orderDetail.getRrp">
+											</div>
+										</td>
+										<td>@orderDetail.getSubTotalCost</td>
+										<td>@orderDetail.getSubTotalRrp</td>
+									</tr>
+								}								
+							</tbody>
+						</table>
+					</div>
+					<script type="text/javascript">
+					    $(document).ready(function()
+					        {
+						        $("#showTable, #hideTable").click(function () {     
+						        	$('#showTable').toggle();
+						            $('#hideTable').toggle();
+						            $('#table').toggle("slow");
+						        });
+					        });
+				         
+					</script>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-2">
+					Total cost: @order.getTotalCost
+				</div>
+				<div class="col-md-2">
+					Total Rrp: @order.getTotalRrp
+				</div>
+				<div class="col-md-2">
+					Profit: @order.getTotalProfit
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-1">
+					<a href="@routes.OrderController.listAllOrders()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
+				</div>
+				<div id="saveCancelButtons">
+					<div class="col-md-5">
+						&nbsp;	
+					</div>
+					<div class="col-md-1">
+						<a id="submit" href="#"><i class="glyphicon glyphicon-ok green"></i> Save</a>
+						
+					</div>
+					<div class="col-md-1">
+						<a href="@routes.OrderController.listAllOrders()"><i class="glyphicon glyphicon-remove red"></i> Cancel</a>
+					</div>
+				</div>
+				<script type="text/javascript">
+					$("#submit").click(function(e){
+					    $("#form").submit();
+					});
+				</script>
+				
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src='@routes.Assets.at("js/private/orderForm.min.js")'></script>
+	<script type="text/javascript">
+		@if(flash.containsKey("edit")){
+			editModeForm();
+		}else{
+			viewModeForm();
+		}
+	</script>
 }

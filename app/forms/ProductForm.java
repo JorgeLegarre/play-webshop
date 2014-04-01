@@ -9,6 +9,7 @@ public final class ProductForm {
 	private String description;
 	private double cost;
 	private double rrp;
+	private int productStock;
 	private List<Integer> categories;
 
 	public ProductForm() {
@@ -16,13 +17,13 @@ public final class ProductForm {
 	}
 
 	public ProductForm(int id, String name, String description, double cost,
-			double rrp, List<Integer> categories) {
-		super();
+			double rrp, int productStock, List<Integer> categories) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.cost = cost;
 		this.rrp = rrp;
+		this.productStock = productStock;
 		this.categories = categories;
 	}
 
@@ -66,6 +67,14 @@ public final class ProductForm {
 		this.rrp = rrp;
 	}
 
+	public int getProductStock() {
+		return productStock;
+	}
+
+	public void setProductStock(int productStock) {
+		this.productStock = productStock;
+	}
+
 	public List<Integer> getCategories() {
 		return categories;
 	}
@@ -78,7 +87,8 @@ public final class ProductForm {
 	public String toString() {
 		return "ProductForm [id=" + id + ", name=" + name + ", description="
 				+ description + ", cost=" + cost + ", rrp=" + rrp
-				+ ", categories=" + categories + "]";
+				+ ", productStock=" + productStock + ", categories="
+				+ categories + "]";
 	}
 
 }

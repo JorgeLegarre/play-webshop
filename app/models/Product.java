@@ -5,9 +5,10 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 @Entity
@@ -29,7 +30,11 @@ public class Product {
 	@Column(nullable = false)
 	private double rrp;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@Column(nullable = false, columnDefinition = "int(10) default '0'")
+	private int productStock;
+
+	@ManyToMany
+	@JoinTable(name = "Product_Category", joinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "category_id", referencedColumnName = "id") })
 	private List<Category> categories;
 
 	public Product() {
@@ -37,19 +42,21 @@ public class Product {
 	}
 
 	public Product(int id, String name, String description, double cost,
-			double rrp, List<Category> categories) {
+			double rrp, int productStock, List<Category> categories) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.cost = cost;
 		this.rrp = rrp;
+		this.productStock = productStock;
 		this.categories = categories;
 	}
 
 	public Product(String name, String description, double cost, double rrp,
-			List<Category> categories) {
-		this(DEFAULT_PRODUCT_ID, name, description, cost, rrp, categories);
+			int productStock, List<Category> categories) {
+		this(DEFAULT_PRODUCT_ID, name, description, cost, rrp, productStock,
+				categories);
 	}
 
 	public int getId() {
@@ -92,6 +99,14 @@ public class Product {
 		this.rrp = rrp;
 	}
 
+	public int getProductStock() {
+		return productStock;
+	}
+
+	public void setProductStock(int productStock) {
+		this.productStock = productStock;
+	}
+
 	public List<Category> getCategories() {
 		return categories;
 	}
@@ -104,17 +119,7 @@ public class Product {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((categories == null) ? 0 : categories.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(cost);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result
-				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		temp = Double.doubleToLongBits(rrp);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -127,35 +132,16 @@ public class Product {
 		if (getClass() != obj.getClass())
 			return false;
 		Product other = (Product) obj;
-		if (categories == null) {
-			if (other.categories != null)
-				return false;
-		} else if (!categories.equals(other.categories))
-			return false;
-		if (Double.doubleToLongBits(cost) != Double
-				.doubleToLongBits(other.cost))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
 		if (id != other.id)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (Double.doubleToLongBits(rrp) != Double.doubleToLongBits(other.rrp))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return String
-				.format("Id: %s, Name: %s, Description: %s, Cost: %s, RRP: %s, Categories: %s",
-						id, name, description, cost, rrp, categories);
+		return "Product [id=" + id + ", name=" + name + ", description="
+				+ description + ", cost=" + cost + ", rrp=" + rrp
+				+ ", productStock=" + productStock + ", categories="
+				+ categories + "]";
 	}
 }

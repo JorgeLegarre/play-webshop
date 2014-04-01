@@ -1,5 +1,7 @@
 package models;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "Orders")
 public class Order {
 	public static int DEFAULT_ID = 0;
 
@@ -26,21 +28,23 @@ public class Order {
 	@Column(nullable = false)
 	private Date date;
 
+	@ManyToOne
+	private OrderStatus status;
+
 	@OneToMany(mappedBy = "order")
 	private List<OrderDetail> orderDetails;
 
 	public Order() {
-		this(DEFAULT_ID, null, null);
+		orderDetails = new ArrayList<>();
 	}
 
-	public Order(int id, User user, Date date) {
+	public Order(int id, User user, Date date, OrderStatus status,
+			List<OrderDetail> orderDetails) {
 		this.id = id;
 		this.user = user;
 		this.date = date;
-	}
-
-	public Order(User user, Date date) {
-		this(DEFAULT_ID, user, date);
+		this.status = status;
+		this.orderDetails = orderDetails;
 	}
 
 	public int getId() {
@@ -63,17 +67,60 @@ public class Order {
 		return date;
 	}
 
+	public String getDateString() {
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sf.format(date);
+	}
+
 	public void setDate(Date date) {
 		this.date = date;
 	}
 
+	public OrderStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(OrderStatus status) {
+		this.status = status;
+	}
+
+	public List<OrderDetail> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	public double getTotalCost() {
+		double total = 0;
+
+		for (OrderDetail detail : orderDetails) {
+			total += detail.getSubTotalCost();
+		}
+
+		return total;
+	}
+
+	public double getTotalRrp() {
+		double total = 0;
+
+		for (OrderDetail detail : orderDetails) {
+			total += detail.getSubTotalRrp();
+		}
+
+		return total;
+	}
+
+	public double getTotalProfit() {
+		return getTotalRrp() - getTotalCost();
+	}
+
 	@Override
 	public int hashCode() {
-		int prime = 31;
+		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((date == null) ? 0 : date.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
 
@@ -86,24 +133,15 @@ public class Order {
 		if (getClass() != obj.getClass())
 			return false;
 		Order other = (Order) obj;
-		if (date == null) {
-			if (other.date != null)
-				return false;
-		} else if (!date.equals(other.date))
-			return false;
 		if (id != other.id)
-			return false;
-		if (user == null) {
-			if (other.user != null)
-				return false;
-		} else if (!user.equals(other.user))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", user=" + user + ", date=" + date + "]";
+		return "Order [id=" + id + ", user=" + user + ", date=" + date
+				+ ", status=" + status + ", orderDetails=" + orderDetails + "]";
 	}
 
 }

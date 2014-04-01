@@ -4,9 +4,10 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 @Entity
@@ -20,7 +21,8 @@ public class Category {
 	@Column(nullable = false)
 	private String name;
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
+	@ManyToMany
+	@JoinTable(name = "Product_Category", joinColumns = { @JoinColumn(name = "category_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "id") })
 	private List<Product> products;
 
 	public Category() {

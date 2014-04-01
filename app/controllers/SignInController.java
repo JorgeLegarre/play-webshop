@@ -12,7 +12,9 @@ import views.html.privat.privateLogin;
 import forms.SignInForm;
 
 public class SignInController extends Controller {
-	public static Result showLogin() {
+
+	// PRIVATE
+	public static Result showPrivateLogin() {
 		if (session().get("username") != null) {
 			return redirect(routes.ApplicationController.mainMenu());
 		}
@@ -20,7 +22,8 @@ public class SignInController extends Controller {
 	}
 
 	@Transactional
-	public static Result login() {
+	public static Result privateLogin() {
+		session().clear();
 
 		Form<SignInForm> signInForm = Form.form(SignInForm.class);
 		SignInForm signIn = signInForm.bindFromRequest().get();
@@ -36,9 +39,9 @@ public class SignInController extends Controller {
 		return ok(privateLogin.render());
 	}
 
-	public static Result logOut() {
+	public static Result privateLogOut() {
 		session().clear();
-		return redirect(routes.SignInController.showLogin());
+		return redirect(routes.SignInController.showPrivateLogin());
 	}
 
 	private static User getPrivateUser(String email, String password) {

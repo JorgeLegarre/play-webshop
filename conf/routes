@@ -4,10 +4,10 @@
 
 # PRIVATE
 # login
-GET 	/private						  		   	controllers.SignInController.showLogin()
-GET 	/private/						  		   	controllers.SignInController.showLogin()
-POST 	/private/login					  		   	controllers.SignInController.login()
-GET 	/private/logout					  		   	controllers.SignInController.logOut()
+GET 	/private						  		   	controllers.SignInController.showPrivateLogin()
+GET 	/private/						  		   	controllers.SignInController.showPrivateLogin()
+POST 	/private/login					  		   	controllers.SignInController.privateLogin()
+GET 	/private/logout					  		   	controllers.SignInController.privateLogOut()
 
 # main menu
 GET 	/private/mainMenu					  	   	controllers.ApplicationController.mainMenu()
@@ -15,33 +15,39 @@ GET 	/private/mainMenu					  	   	controllers.ApplicationController.mainMenu()
 # producs
 GET     /private/products                          	controllers.ProductController.listAllProducts()
 GET     /private/products/                         	controllers.ProductController.listAllProducts()
-
 GET     /private/products/add            			controllers.ProductController.showAddProduct()
-
 GET     /private/products/:id            			controllers.ProductController.showOneProduct(id : Int)
-
 GET     /private/products/:id/edit            		controllers.ProductController.showEditProduct(id : Int)
-
 POST    /private/products/delete           			controllers.ProductController.deleteProduct()
-
 POST	/private/products/save						controllers.ProductController.saveProduct()
 
 #category
-GET     /private/categories                        	controllers.CategoryController.listAllCategories()
-GET     /private/categories/                       	controllers.CategoryController.listAllCategories()
-GET     /private/categories/:id                    	controllers.CategoryController.showOneCategory(id : Int)
+GET     /private/categories                         controllers.CategoryController.listAllCategories()
+GET     /private/categories/                        controllers.CategoryController.listAllCategories()
+GET     /private/categories/add            			controllers.CategoryController.showAddCategory()
+GET     /private/categories/:id            			controllers.CategoryController.showOneCategory(id : Int)
+GET     /private/categories/:id/edit            	controllers.CategoryController.showEditCategory(id : Int)
+POST    /private/categories/delete           		controllers.CategoryController.deleteCategory()
+POST	/private/categories/save					controllers.CategoryController.saveCategory()
 
 #user
-GET     /private/users                        	   	controllers.UserController.listAllUsers()
-GET     /private/users/                        	   	controllers.UserController.listAllUsers()
-GET     /private/users/currentUser                  controllers.UserController.showCurrentUser()
-GET     /private/users/:id                         	controllers.UserController.showOneUser(id : Int)
-
+GET     /private/users                         		controllers.UserController.listAllUsers()
+GET     /private/users/                        		controllers.UserController.listAllUsers()
+GET     /private/users/add            				controllers.UserController.showAddUser()
+GET     /private/users/currentUser          		controllers.UserController.showCurrentUser()
+GET     /private/users/:id            				controllers.UserController.showOneUser(id : Int)
+GET     /private/users/:id/edit            			controllers.UserController.showEditUser(id : Int)
+POST    /private/users/delete           			controllers.UserController.deleteUser()
+POST	/private/users/save							controllers.UserController.saveUser()
 
 #order
-GET     /private/orders                        	   	controllers.OrderController.listAllOrders()
-GET     /private/orders/                       	   	controllers.OrderController.listAllOrders()
-GET     /private/orders/:id                        	controllers.OrderController.showOneOrder(id : Int)
+GET     /private/orders                         	controllers.OrderController.listAllOrders()
+GET     /private/orders/                        	controllers.OrderController.listAllOrders()
+GET     /private/orders/add            				controllers.OrderController.showAddOrder()
+GET     /private/orders/:id            				controllers.OrderController.showOneOrder(id : Int)
+GET     /private/orders/:id/edit            		controllers.OrderController.showEditOrder(id : Int)
+POST    /private/orders/delete           			controllers.OrderController.deleteOrder()
+POST	/private/orders/save						controllers.OrderController.saveOrder()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               				controllers.Assets.at(path="/public", file)

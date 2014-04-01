@@ -49,23 +49,31 @@ a.btn-default:hover{
 	background-color: #ababab;
 }
 
-.green{
+.green, #green{
 	color:green;
 }
 
-.red{
+.red, #red{
 	color:red;
 }
 
-.yellow{
+.yellow, #yellow{
 	color: yellow;
 }
 
+.white, #whie{
+	color: white;
+}
+
+
 #editPencil{
-	padding-top: 30px;
-	left: -35px;
+	padding-top: 32px;
 	position: relative;
 	height: 64px;
+}
+
+.hideClass{
+	display: none;
 }
 
 .tooltip.top .tooltip-arrow {
@@ -88,4 +96,35 @@ a.btn-default:hover{
   background: #fff;
   border: solid 1px #fff;
   font-weight: normal;
+}
+
+.tableIconCRUDFixSize{
+	width: 150px;
+}
+
+.generalTableHeight{
+	height: 442px;
+	overflow: auto;
+}
+.reducedTableHeight{
+	height: 300px;
+	overflow: auto;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(255,255,255,.5);
+    -webkit-box-shadow: 0 0 1px rgba(0,0,0,.5);
+}
+
+.input-append{
+	color: black;
+}
+
+.datepicker, .timepicker-hour, .timepicker-minute, .timepicker-second{
+	color: black;
 }

@@ -19,7 +19,7 @@ import forms.ProductForm;
 public final class ProductController extends Controller {
 
 	@Transactional
-	@Security.Authenticated
+	@Security.Authenticated(PrivateAutenticatedController.class)
 	public static Result listAllProducts() {
 		List<Product> products = getAllProducts();
 
@@ -27,28 +27,29 @@ public final class ProductController extends Controller {
 	}
 
 	@Transactional
-	@Security.Authenticated
+	@Security.Authenticated(PrivateAutenticatedController.class)
 	public static Result showAddProduct() {
 		Product product = new Product();
 		List<Category> categories = getAllCategories();
 
-		return ok(upsert.render(product, categories, true));
+		flash().put("edit", "yes");
+		return ok(upsert.render(product, categories));
 	}
 
 	@Transactional
-	@Security.Authenticated
+	@Security.Authenticated(PrivateAutenticatedController.class)
 	public static Result showOneProduct(int id) {
 		return showProduct(id, false);
 	}
 
 	@Transactional
-	@Security.Authenticated
+	@Security.Authenticated(PrivateAutenticatedController.class)
 	public static Result showEditProduct(int id) {
 		return showProduct(id, true);
 	}
 
 	@Transactional
-	@Security.Authenticated
+	@Security.Authenticated(PrivateAutenticatedController.class)
 	public static Result deleteProduct() {
 		Map<String, String[]> parameters = request().body().asFormUrlEncoded();
 		String[] productId = parameters.get("productId");
@@ -69,18 +70,15 @@ public final class ProductController extends Controller {
 	}
 
 	@Transactional
-	@Security.Authenticated
+	@Security.Authenticated(PrivateAutenticatedController.class)
 	public static Result saveProduct() {
 		Form<ProductForm> forms = Form.form(ProductForm.class);
 		ProductForm productForm = forms.bindFromRequest().get();
 		// automatic form dont read categories
 		productForm.setCategories(readCategories());
 
-		if (productForm.getId() == 0) {
-			createProduct(productForm);
-		} else {
-			updateProduct(productForm);
-		}
+		Product product = parseForm(productForm);
+		JPA.em().merge(product);
 
 		return redirect(routes.ProductController.listAllProducts());
 	}
@@ -93,7 +91,10 @@ public final class ProductController extends Controller {
 			return notFound("Product not found");
 		}
 
-		return ok(upsert.render(product, categories, edit));
+		if (edit) {
+			flash().put("edit", "yes");
+		}
+		return ok(upsert.render(product, categories));
 	}
 
 	private static List<Integer> readCategories() {
@@ -108,26 +109,10 @@ public final class ProductController extends Controller {
 		return categories;
 	}
 
-	private static void createProduct(ProductForm productForm) {
-		Product product = parseForm(productForm);
-		JPA.em().persist(product);
-	}
-
-	private static void updateProduct(ProductForm productForm) {
-		Product p = JPA.em().find(Product.class, productForm.getId());
-
-		p.setName(productForm.getName());
-		p.setDescription(productForm.getDescription());
-		p.setCost(productForm.getCost());
-		p.setRrp(productForm.getRrp());
-		p.setCategories(searchCategories(productForm.getCategories()));
-
-	}
-
 	private static Product parseForm(ProductForm productForm) {
 		return new Product(productForm.getId(), productForm.getName(),
 				productForm.getDescription(), productForm.getCost(),
-				productForm.getRrp(),
+				productForm.getRrp(), productForm.getProductStock(),
 				searchCategories(productForm.getCategories()));
 	}
 
