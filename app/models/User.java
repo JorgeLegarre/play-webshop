@@ -1,9 +1,12 @@
 package models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class User {
@@ -44,6 +47,9 @@ public class User {
 
 	private boolean isAdmin;
 
+	@OneToMany(mappedBy = "user")
+	private List<Order> orders;
+
 	public User() {
 	}
 
@@ -76,82 +82,111 @@ public class User {
 		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getEmail() {
 		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
 		return password;
 	}
 
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public String getFirstname() {
 		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
 	public String getLastname() {
 		return lastname;
 	}
 
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
 	public String getDob() {
 		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
 	}
 
 	public String getTelephone() {
 		return telephone;
 	}
 
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
 	public String getAddress1() {
 		return address1;
+	}
+
+	public void setAddress1(String address1) {
+		this.address1 = address1;
 	}
 
 	public String getAddress2() {
 		return address2;
 	}
 
+	public void setAddress2(String address2) {
+		this.address2 = address2;
+	}
+
 	public String getTown() {
 		return town;
+	}
+
+	public void setTown(String town) {
+		this.town = town;
 	}
 
 	public String getPostcode() {
 		return postcode;
 	}
 
+	public void setPostcode(String postcode) {
+		this.postcode = postcode;
+	}
+
 	public boolean isAdmin() {
 		return isAdmin;
 	}
 
-	@Override
-	public String toString() {
-		return String
-				.format("Id: %s, User: %s, Firstname: %s, Lastname: %s, Dob: %s, Telephone: %s, Address: %s %s %s %s, isAdmin: %s ",
-						getId(), getEmail(), getFirstname(), getLastname(),
-						getDob(), getTelephone(), getAddress1(), getAddress2(),
-						getTown(), getPostcode(), isAdmin());
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
 
 	@Override
 	public int hashCode() {
-		int prime = 31;
+		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((address1 == null) ? 0 : address1.hashCode());
-		result = prime * result
-				+ ((address2 == null) ? 0 : address2.hashCode());
-		result = prime * result + ((dob == null) ? 0 : dob.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result
-				+ ((firstname == null) ? 0 : firstname.hashCode());
 		result = prime * result + id;
-		result = prime * result + (isAdmin ? 1231 : 1237);
-		result = prime * result
-				+ ((lastname == null) ? 0 : lastname.hashCode());
-		result = prime * result
-				+ ((password == null) ? 0 : password.hashCode());
-		result = prime * result
-				+ ((postcode == null) ? 0 : postcode.hashCode());
-		result = prime * result
-				+ ((telephone == null) ? 0 : telephone.hashCode());
-		result = prime * result + ((town == null) ? 0 : town.hashCode());
 		return result;
 	}
 
@@ -164,61 +199,18 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (address1 == null) {
-			if (other.address1 != null)
-				return false;
-		} else if (!address1.equals(other.address1))
-			return false;
-		if (address2 == null) {
-			if (other.address2 != null)
-				return false;
-		} else if (!address2.equals(other.address2))
-			return false;
-		if (dob == null) {
-			if (other.dob != null)
-				return false;
-		} else if (!dob.equals(other.dob))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (firstname == null) {
-			if (other.firstname != null)
-				return false;
-		} else if (!firstname.equals(other.firstname))
-			return false;
 		if (id != other.id)
 			return false;
-		if (isAdmin != other.isAdmin)
-			return false;
-		if (lastname == null) {
-			if (other.lastname != null)
-				return false;
-		} else if (!lastname.equals(other.lastname))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (postcode == null) {
-			if (other.postcode != null)
-				return false;
-		} else if (!postcode.equals(other.postcode))
-			return false;
-		if (telephone == null) {
-			if (other.telephone != null)
-				return false;
-		} else if (!telephone.equals(other.telephone))
-			return false;
-		if (town == null) {
-			if (other.town != null)
-				return false;
-		} else if (!town.equals(other.town))
-			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", email=" + email + ", password=" + password
+				+ ", firstname=" + firstname + ", lastname=" + lastname
+				+ ", dob=" + dob + ", telephone=" + telephone + ", address1="
+				+ address1 + ", address2=" + address2 + ", town=" + town
+				+ ", postcode=" + postcode + ", isAdmin=" + isAdmin + "]";
 	}
 
 }

@@ -1,0 +1,41 @@
+@(user: User)
+
+@publica.publicLookAndFeel("Showing Orders", 2) {
+		<h2>Orders</h2>
+		<div class="generalTableHeight">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<td>Id</td>
+						<td>User</td>
+						<td>Date</td>
+						<td>Status</td>
+						<td>Total Cost</td>
+						<td  class="tableIconCRUDFixSize">&nbsp;</td>
+					</tr>
+				</thead>
+				<tbody>
+					@for(order <- user.getOrders){
+						<tr>
+							<td>@order.getId</td>
+							<td>@order.getUser.getEmail</td>
+							<td>@order.getDateString</td>
+							<td>@order.getStatus.getDescription</td>
+							<td>@order.getTotalRrp</td>
+							<td>
+								<a href="@routes.OrderPublicController.showOneOrder(order.getId)" data-toggle="tooltip" data-placement="top" title="View details">
+									<i class="glyphicon glyphicon-eye-open"></i>
+								</a>
+							</td>
+						</tr>
+					}
+					<script type="text/javascript">
+						$(function(){
+							$('[data-toggle="tooltip"]').tooltip();
+						});
+					</script>
+				</tbody>
+			</table>
+		</div>
+}
+

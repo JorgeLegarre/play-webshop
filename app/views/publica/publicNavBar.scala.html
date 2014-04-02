@@ -19,30 +19,25 @@
 		<li @if(active == 1){
 			class="active"
 		}>
-			<a href="@routes.ProductController.listAllProducts">Products</a>
+			<a href="@routes.ProductsPublicController.listAllProducts()">Buy by product</a>
 		</li>
-        <li @if(active == 2){
+		<li @if(active == 2){
 			class="active"
 		}>
-			<a href="@routes.CategoryController.listAllCategories">Categories</a>
+			<a href="@routes.OrderPublicController.showUserOrders()">Show user orders</a>
 		</li>
-        <li @if(active == 3){
+		<li @if(active == 3){
 			class="active"
 		}>
-			<a href="@routes.UserController.listAllUsers">Users</a>
-		</li>
-        <li @if(active == 4){
-			class="active"
-		}>
-			<a href="@routes.OrderController.listAllOrders">Orders</a>
+			<a href="@routes.UserPublicController.showCurrentUser">Profile</a>
 		</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
        <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">@session.get("username") <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href='@routes.UserController.showCurrentUser()'>Profile</a></li>
-            <li><a href="@routes.SignInController.privateLogOut">Log out</a></li>
+            <li><a href='@routes.UserPublicController.showCurrentUser'>Profile</a></li>
+            <li><a href="@routes.SignInController.publicLogOut">Log out</a></li>
           </ul>
         </li>
       </ul>

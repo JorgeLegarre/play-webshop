@@ -1,0 +1,53 @@
+@* listAll Template File *@
+@(products :List[Product])
+
+@publica.publicLookAndFeel("Showing products", 1) {
+	<div class="col-md-12">
+		<h2>Products</h2>
+		
+		<div class="generalTableHeight">		
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<td>Id</td>
+							<td>Name</td>
+							<td>Description</td>
+							<td>Cost</td>
+							<td>&nbsp;</td>
+						</tr>
+					</thead>
+					<tbody>
+						@for(product <- products){ 
+							<tr>
+								<td>@product.getId</td>
+								<td>@product.getName</td>
+								<td>@product.getDescription</td>
+								<td>@product.getCost</td>
+								<td>
+									<a href="javascript:buy(@product.getId)">buy it now!</a>
+								</td>
+							</tr>
+						}
+						<form method="POST" id="buy" action="@routes.OrderPublicController.buy()"> 
+							<input type="hidden" id="productId" name="productId" value="1"/>
+						</form>
+						<script type="text/javascript">
+						function buy(id){
+							$("#productId").val(id);
+							
+							$("#buy").submit();
+						}
+						
+						$(function(){
+							$('[data-toggle="confirmation"]').confirmation({singleton:true});
+							$('[data-toggle="tooltip"]').tooltip();
+						});
+						</script>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+}

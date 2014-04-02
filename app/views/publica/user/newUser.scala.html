@@ -1,0 +1,187 @@
+@* upsert Template File *@
+@(user: models.User)
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8">
+	<title>New User</title>
+	
+	<!-- Bootstrap -->
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<!-- <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script> -->
+	
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	
+	<!-- bootstrap multiselect -->
+	<script type="text/javascript" src='@routes.Assets.at("js/bootstrap-multiselect.min.js")'></script>
+	<link rel="stylesheet" href='@routes.Assets.at("css/bootstrap-multiselect.min.css")' type="text/css"/>
+	
+	<!-- bootstrap tooltip confirmation -->
+	<script type="text/javascript" src='@routes.Assets.at("js/bootstrap-tooltip.min.js")'></script>
+	<script type="text/javascript" src='@routes.Assets.at("js/bootstrap-confirmation.min.js")'></script>
+	
+	<!-- bootstrap datepicker -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/js/bootstrap-datetimepicker.min.js"></script>
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.0.0/css/bootstrap-datetimepicker.min.css">
+	
+	<!-- internal -->
+	<link rel="stylesheet" href='@routes.Assets.at("css/generalMain.min.css")'>
+	<link rel="stylesheet" href='@routes.Assets.at("css/publicMain.min.css")'>
+	
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-2">
+						<h2>User</h2>
+					</div>
+					<div class="col-md-4">
+						<div class="pull-right">
+							<div id="editPencil">
+								<i id="editModeIcon" class="glyphicon glyphicon-pencil yellow"></i>
+								<a id="viewModeIcon" href="#" data-toggle="tooltip" data-placement="top" title="Edit">
+									<i class="glyphicon glyphicon-lock yellow" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+								</a>
+								<script type="text/javascript">
+									$(function(){
+										$('[data-toggle="tooltip"]').tooltip();
+										 $("#viewModeIcon").click(function () {     
+									        	editModeForm();
+									        	return false;
+									        });
+									});
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+				<form role="form" id="form" method="POST" action="@routes.UserPublicController.saveUser()">
+					<input type="hidden" name="id" value="@user.getId"></input>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="email">Email:</label>
+								<input type="text" class="form-control" id="email" name="email" placeholder="Email" value="@user.getEmail" disabled>
+							</div>
+						</div>	
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="password">Password:</label>
+								<input type="password" class="form-control" id="password" name="password" placeholder="password" value="@user.getPassword" disabled>
+							</div>
+						</div>
+						<div class="col-md-3" id="repassword">
+							<div class="form-group">
+								<label for="repassword">Confirm password:</label>
+								<input type="password" class="form-control" name="repassword" placeholder="repassword" value="@user.getPassword" disabled>
+							</div>
+						</div>		
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="firstname">First Name:</label>
+								<input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" value="@user.getFirstname" disabled>
+							</div>
+						</div>	
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="lastname">Last Name:</label>
+								<input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" value="@user.getLastname" disabled>
+							</div>
+						</div>	
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="dob">Date of birth:</label>
+								<div id="editDob">
+									<div class="input-group date" id="dateOfBirth" data-date-format="YYYY-MM-DD">
+										<input type='text' id="dob" name="dob" class="form-control" placeholder="yyyy-mm-dd" value="@user.getDob"/>
+					                    <span class="input-group-addon"><span id="dobCalendar" class="glyphicon glyphicon-calendar"></span>
+					                    </span>
+									</div>
+									<script type="text/javascript">
+										$('#dateOfBirth').datetimepicker({
+						                    pickTime: false
+						                });
+									</script>
+								</div>
+								<div id="viewDob">
+									<input type="text" class="form-control" value="@user.getDob" disabled>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="telephone">Telephone:</label>
+								<input type="text" class="form-control" id="telephone" name="telephone" placeholder="Telephone" value="@user.getTelephone" disabled>
+							</div>
+						</div>	
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="address1">Address:</label>
+								<input type="text" class="form-control" id="address1" name="address1" placeholder="Address 1" value="@user.getAddress1" disabled>
+							</div>
+						</div>	
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<input type="text" class="form-control" id="address2" name="address2" placeholder="Address 2" value="@user.getAddress2" disabled>
+							</div>
+						</div>	
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="town">Town:</label>
+								<input type="text" class="form-control" id="town" name="town" placeholder="Town" value="@user.getTown" disabled>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="postcode">Postcode:</label>
+								<input type="text" class="form-control" id="postcode" name="postcode" placeholder="Postcode" value="@user.getPostcode" disabled>
+							</div>
+						</div>	
+					</div>
+					<br>
+					<div class="row">
+						<div id="saveCancelButtons">
+							<div class="col-md-3">
+								&nbsp;	
+							</div>
+							<div class="col-md-1">
+								<a id="submit" href="#"><i class="glyphicon glyphicon-ok green"></i> Save</a>
+								
+							</div>
+							<div class="col-md-1">
+								<a href="@routes.SignInController.showPublicLogin()"><i class="glyphicon glyphicon-remove red"></i> Cancel</a>
+							</div>
+						</div>
+						<script type="text/javascript">
+							$("#submit").click(function(e){
+							    $("#form").submit();
+							});
+						</script>
+						
+					</div>
+				</form>
+			</div>
+			<script type="text/javascript" src='@routes.Assets.at("js/private/userForm.min.js")'></script>
+			<script type="text/javascript">
+				editModeForm();
+			</script>
+		</div>
+	</div>
+</body></html>

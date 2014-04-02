@@ -17,10 +17,16 @@ import forms.UserForm;
 public class UserController extends Controller {
 
 	@Transactional
+	@Security.Authenticated(PrivateAutenticatedController.class)
 	public static Result showCurrentUser() {
 		String currentEmail = session().get("username");
 
 		User user = getOneUserByEmail(currentEmail);
+
+		if (user == null) {
+			session().clear();
+			return redirect(routes.SignInController.showPrivateLogin());
+		}
 
 		return showUser(user, false);
 	}
@@ -69,8 +75,15 @@ public class UserController extends Controller {
 
 			User user = getOneUser(id);
 
+			String oldEmail = user.getEmail();
+
 			if (user != null) {
 				JPA.em().remove(user);
+			}
+
+			if (session().get("username").equals(oldEmail)) {
+				session().clear();
+				return redirect(routes.SignInController.showPrivateLogin());
 			}
 
 			return redirect(routes.UserController.listAllUsers());

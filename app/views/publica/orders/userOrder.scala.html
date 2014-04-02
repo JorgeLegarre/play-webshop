@@ -1,0 +1,102 @@
+@* userOrder Template File *@
+@(order: Order)
+
+@publica.publicLookAndFeel("Showing Orders", 2) {
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2">
+				<h2>Order</h2>
+			</div>
+		</div>
+		<form role="form" id="form" method="POST" action="#">
+			<div class="row">
+				<div class="col-md-2">
+					<label>Id:</label>
+					<div>
+						@order.getId
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label for="dob">Date:</label>
+						<div>
+							@order.getDateString
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="status">Status:</label>
+						<div id="viewStatus" class="green">
+							@order.getStatus.getDescription
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8">
+					Order details
+					<div id="table" class="reducedTableHeight">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<td>Product Id</td>
+									<td>Product Name</td>
+									<td>Quantity<br><span id="info" class="hideClass red">(0 to delete)</span></td>
+									<td>Unit Rrp</td>
+									<td>Subtotal Rrp</td>
+								</tr>
+							</thead>
+							<tbody>
+								@for(orderDetail <- order.getOrderDetails){
+									<tr>
+										<td>@orderDetail.getId.getProductId</td>
+										<td>@orderDetail.getName</td>
+										<td>
+											<div class="view">
+												@orderDetail.getQuantity
+											</div>
+										</td>
+										<td>
+											<div class="view">
+												@orderDetail.getRrp
+											</div>
+										</td>
+										<td>@orderDetail.getSubTotalRrp</td>
+									</tr>
+								}								
+							</tbody>
+						</table>
+					</div>
+					<script type="text/javascript">
+					    $(document).ready(function()
+					        {
+						        $("#showTable, #hideTable").click(function () {     
+						        	$('#showTable').toggle();
+						            $('#hideTable').toggle();
+						            $('#table').toggle("slow");
+						        });
+					        });
+				         
+					</script>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-2">
+					Total Rrp: @order.getTotalRrp
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-1">
+					<a href="@routes.OrderPublicController.showUserOrders()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
+				</div>
+				
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src='@routes.Assets.at("js/private/orderForm.min.js")'></script>
+	<script type="text/javascript">
+			viewModeForm();
+	</script>
+}

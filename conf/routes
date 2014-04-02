@@ -10,7 +10,7 @@ POST 	/private/login					  		   	controllers.SignInController.privateLogin()
 GET 	/private/logout					  		   	controllers.SignInController.privateLogOut()
 
 # main menu
-GET 	/private/mainMenu					  	   	controllers.ApplicationController.mainMenu()
+GET 	/private/mainMenu					  	   	controllers.ApplicationController.privateMainMenu()
 
 # producs
 GET     /private/products                          	controllers.ProductController.listAllProducts()
@@ -49,7 +49,33 @@ GET     /private/orders/:id/edit            		controllers.OrderController.showEd
 POST    /private/orders/delete           			controllers.OrderController.deleteOrder()
 POST	/private/orders/save						controllers.OrderController.saveOrder()
 
+# PUBLIC
+# login
+GET     /											controllers.SignInController.showPublicLogin()
+GET 	/ganges						  		   		controllers.SignInController.showPublicLogin()
+GET 	/ganges/						  		   	controllers.SignInController.showPublicLogin()
+POST 	/ganges/login					  		   	controllers.SignInController.publicLogin()
+GET 	/ganges/logout					  		   	controllers.SignInController.publicLogOut()
+
+# main menu
+GET 	/ganges/mainMenu					  	   	controllers.ApplicationController.publicMainMenu()
+
+#user
+GET     /ganges/users/currentUser          			controllers.UserPublicController.showCurrentUser()
+POST	/ganges/users/save							controllers.UserPublicController.saveUser()
+GET     /ganges/users/add            				controllers.UserPublicController.showAddUser()
+
+#products
+GET		/ganges/products							controllers.ProductsPublicController.listAllProducts()
+
+#orders
+GET     /ganges/orders/:id 							controllers.OrderPublicController.showOneOrder(id: Int)
+GET     /ganges/orders                            	controllers.OrderPublicController.showUserOrders()
+													
+#cart
+POST	/ganges/cart/add							controllers.OrderPublicController.buy()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               				controllers.Assets.at(path="/public", file)
 
-GET 	/*a											controllers.ApplicationController.show404(a)
+GET 	/*a											controllers.ApplicationController.show404(a)                          
