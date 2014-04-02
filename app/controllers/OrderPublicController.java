@@ -51,6 +51,8 @@ public class OrderPublicController extends Controller {
 
 		int productId = Integer.parseInt(parameters.get("productId")[0]);
 		Product product = getOneProduct(productId);
+		product.setProductStock(product.getProductStock() - 1);
+
 		OrderStatus status = getFirstStatus();
 
 		User user = getCurrenUser();
