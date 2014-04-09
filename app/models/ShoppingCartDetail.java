@@ -10,29 +10,29 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 
 @Entity
-public class OrderDetail {
+public final class ShoppingCartDetail {
 	@Embeddable
 	public static class Key implements Serializable {
 
 		private static final long serialVersionUID = 20140318;
 
-		private int orderId;
+		private int userId;
 		private int productId;
 
 		public Key() {
 		}
 
-		public Key(int orderId, int productId) {
-			this.orderId = orderId;
+		public Key(int userId, int productId) {
+			this.userId = userId;
 			this.productId = productId;
 		}
 
-		public int getOrderId() {
-			return orderId;
+		public int getUserId() {
+			return userId;
 		}
 
-		public void setOrderId(int orderId) {
-			this.orderId = orderId;
+		public void setUserId(int userId) {
+			this.userId = userId;
 		}
 
 		public int getProductId() {
@@ -45,10 +45,10 @@ public class OrderDetail {
 
 		@Override
 		public int hashCode() {
-			int prime = 31;
+			final int prime = 31;
 			int result = 1;
-			result = prime * result + orderId;
 			result = prime * result + productId;
+			result = prime * result + userId;
 			return result;
 		}
 
@@ -61,16 +61,16 @@ public class OrderDetail {
 			if (getClass() != obj.getClass())
 				return false;
 			Key other = (Key) obj;
-			if (orderId != other.orderId)
-				return false;
 			if (productId != other.productId)
+				return false;
+			if (userId != other.userId)
 				return false;
 			return true;
 		}
 
 		@Override
 		public String toString() {
-			return "Key [orderId=" + orderId + ", productId=" + productId + "]";
+			return "Key [userId=" + userId + ", productId=" + productId + "]";
 		}
 
 	}
@@ -79,32 +79,13 @@ public class OrderDetail {
 	private Key id;
 
 	@ManyToOne
-	@MapsId("orderId")
-	private Order order;
-
-	@Column(nullable = false)
-	private String name;
-
-	@Column(nullable = false)
-	private double cost;
-
-	@Column(nullable = false)
-	private double rrp;
+	@MapsId("productId")
+	private Product product;
 
 	@Column(nullable = false)
 	private int quantity;
 
-	public OrderDetail() {
-	}
-
-	public OrderDetail(int orderId, int productId, String name, double cost,
-			double rrp, int quantity) {
-		super();
-		this.id = new Key(orderId, productId);
-		this.name = name;
-		this.cost = cost;
-		this.rrp = rrp;
-		this.quantity = quantity;
+	public ShoppingCartDetail() {
 	}
 
 	public Key getId() {
@@ -115,36 +96,12 @@ public class OrderDetail {
 		this.id = id;
 	}
 
-	public Order getOrder() {
-		return order;
+	public Product getProduct() {
+		return product;
 	}
 
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public double getCost() {
-		return cost;
-	}
-
-	public void setCost(double cost) {
-		this.cost = cost;
-	}
-
-	public double getRrp() {
-		return rrp;
-	}
-
-	public void setRrp(double rrp) {
-		this.rrp = rrp;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	public int getQuantity() {
@@ -155,12 +112,8 @@ public class OrderDetail {
 		this.quantity = quantity;
 	}
 
-	public double getSubTotalCost() {
-		return quantity * cost;
-	}
-
-	public double getSubTotalRrp() {
-		return quantity * rrp;
+	public double getSubTotal() {
+		return quantity * product.getCost();
 	}
 
 	@Override
@@ -179,7 +132,7 @@ public class OrderDetail {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		OrderDetail other = (OrderDetail) obj;
+		ShoppingCartDetail other = (ShoppingCartDetail) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -190,8 +143,7 @@ public class OrderDetail {
 
 	@Override
 	public String toString() {
-		return "OrderDetail [id=" + id + ", name=" + name + ", cost=" + cost
-				+ ", rrp=" + rrp + ", quantity=" + quantity + "]";
+		return "ShoppingCartDetail [id=" + id + ", quantity=" + quantity + "]";
 	}
 
 }

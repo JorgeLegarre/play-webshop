@@ -3,6 +3,7 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ public class Category {
 	@Column(nullable = false)
 	private String name;
 
-	@ManyToMany
+	@ManyToMany(cascade = { CascadeType.MERGE })
 	@JoinTable(name = "Product_Category", joinColumns = { @JoinColumn(name = "category_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "id") })
 	private List<Product> products;
 

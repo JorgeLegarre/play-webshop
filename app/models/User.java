@@ -1,15 +1,20 @@
 package models;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
-public class User {
+public class User implements Serializable {
+
+	private static final long serialVersionUID = 20140407;
 
 	public static int DEFAULT_USER_ID = 0;
 
@@ -47,7 +52,10 @@ public class User {
 
 	private boolean isAdmin;
 
-	@OneToMany(mappedBy = "user")
+	@OneToOne(mappedBy = "user", cascade = { CascadeType.ALL })
+	ShoppingCart shoppingCart;
+
+	@OneToMany(mappedBy = "user", cascade = { CascadeType.ALL })
 	private List<Order> orders;
 
 	public User() {
@@ -172,6 +180,14 @@ public class User {
 
 	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+
+	public ShoppingCart getShoppingCart() {
+		return shoppingCart;
+	}
+
+	public void setShoppingCart(ShoppingCart shoppingCart) {
+		this.shoppingCart = shoppingCart;
 	}
 
 	public List<Order> getOrders() {

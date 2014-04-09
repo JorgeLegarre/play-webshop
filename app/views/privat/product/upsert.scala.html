@@ -1,6 +1,6 @@
 @(product: models.Product, categories :List[models.Category])
 
-@privat.privateLookAndFeel("Showing a product", 1) {
+@views.html.privat.privateLookAndFeel("Showing a product", 1) {
 	<div class="container">
 		<div class="row">
 			<div class="col-md-2">
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 		</div>
-		<form role="form" id="form" method="POST" action="@routes.ProductController.saveProduct()">
+		<form role="form" id="form" method="POST" action="@controllers.privat.routes.ProductController.saveProduct()">
 			<input type="hidden" name="id" value="@product.getId"></input>
 			<div class="row">
 				<div class="col-md-6">
@@ -92,14 +92,14 @@
 					<div id="viewModeCategories" class="form-group">
 						<label for=""categories"">Categories:</label><br>
 							@for(category <-product.getCategories){
-							 	<a href="@routes.CategoryController.showOneCategory(category.getId)">@category.getName</a> 
+							 	<a href="@controllers.privat.routes.CategoryController.showOneCategory(category.getId)">@category.getName</a> 
 							}
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-1">
-					<a href="@routes.ProductController.listAllProducts()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
+					<a href="@controllers.privat.routes.ProductController.listAllProducts()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
 				</div>
 				<div id="saveCancelButtons">
 				
@@ -111,7 +111,7 @@
 						
 					</div>
 					<div class="col-md-1">
-						<a href="@routes.ProductController.listAllProducts()"><i class="glyphicon glyphicon-remove red"></i> Cancel</a>
+						<a href="@controllers.privat.routes.ProductController.showOneProduct(product.getId)"><i class="glyphicon glyphicon-remove red"></i> Cancel</a>
 					</div>
 					<script type="text/javascript">
 						$("#submit").click(function(e){

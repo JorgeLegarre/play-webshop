@@ -1,7 +1,7 @@
 @* upsert Template File *@
 @(user: models.User)
 
-@privat.privateLookAndFeel("Showing an user", 3) {
+@views.html.privat.privateLookAndFeel("Showing an user", 3) {
 	<div class="container">
 		<div class="row">
 			<div class="col-md-2">
@@ -27,7 +27,7 @@
 				</div>
 			</div>
 		</div>
-		<form role="form" id="form" method="POST" action="@routes.UserController.saveUser()">
+		<form role="form" id="form" method="POST" action="@controllers.privat.routes.UserController.saveUser()">
 			<input type="hidden" name="id" value="@user.getId"></input>
 			<div class="row">
 				<div class="col-md-6">
@@ -136,7 +136,7 @@
 			<br>
 			<div class="row">
 				<div class="col-md-1">
-					<a href="@routes.UserController.listAllUsers()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
+					<a href="@controllers.privat.routes.UserController.listAllUsers()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
 				</div>
 				<div id="saveCancelButtons">
 					<div class="col-md-3">
@@ -147,7 +147,7 @@
 						
 					</div>
 					<div class="col-md-1">
-						<a href="@routes.UserController.listAllUsers()"><i class="glyphicon glyphicon-remove red"></i> Cancel</a>
+						<a id="cancel" href="@controllers.privat.routes.UserController.showOneUser(user.getId)"><i class="glyphicon glyphicon-remove red"></i> Cancel</a>
 					</div>
 				</div>
 				<script type="text/javascript">

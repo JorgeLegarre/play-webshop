@@ -1,5 +1,6 @@
-package controllers;
+package controllers.publica;
 
+import controllers.routes;
 import play.mvc.Http.Context;
 import play.mvc.Result;
 import play.mvc.Security;

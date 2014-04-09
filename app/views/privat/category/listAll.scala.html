@@ -1,6 +1,6 @@
 @(categories: List[models.Category])
 
-@privat.privateLookAndFeel("Showing categories", 2) {
+@views.html.privat.privateLookAndFeel("Showing categories", 2) {
 	<div class="col-md-6">
 		<h2>Categories</h2>
 			<div class="generalTableHeight">
@@ -9,7 +9,7 @@
 						<tr>
 							<td>Id</td>
 							<td>Name</td>
-							<td  class="tableIconCRUDFixSize"><span><a href="@routes.CategoryController.showAddCategory()" data-toggle="tooltip" data-placement="top" title="New Category"><i class="glyphicon glyphicon-plus"></i></a></span></td>
+							<td  class="tableIconCRUDFixSize"><span><a href="@controllers.privat.routes.CategoryController.showAddCategory()" data-toggle="tooltip" data-placement="top" title="New Category"><i class="glyphicon glyphicon-plus"></i></a></span></td>
 						</tr>
 					</thead>
 					<tbody>
@@ -18,17 +18,17 @@
 								<td>@category.getId</td>
 								<td>@category.getName</td>
 								<td>
-									<a href="@routes.CategoryController.showOneCategory(category.getId)" data-toggle="tooltip" data-placement="top" title="View details">
+									<a href="@controllers.privat.routes.CategoryController.showOneCategory(category.getId)" data-toggle="tooltip" data-placement="top" title="View details">
 										<i class="glyphicon glyphicon-eye-open"></i>
 									</a>
-									<a href="@routes.CategoryController.showEditCategory(category.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
+									<a href="@controllers.privat.routes.CategoryController.showEditCategory(category.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
 									<a href="javascript:del(@category.getId)" id="submit"  data-toggle="confirmation" data-placement="top" data-original-title title>
 										<i class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="right" title="Delete"></i>
 									</a>
 								</td>
 							</tr>
 						}
-						<form method="POST" id="delForm" action="@routes.CategoryController.deleteCategory()">
+						<form method="POST" id="delForm" action="@controllers.privat.routes.CategoryController.deleteCategory()">
 							<input type="hidden" id="categoryId" name="categoryId" value=""/>
 						</form>
 						<script type="text/javascript">

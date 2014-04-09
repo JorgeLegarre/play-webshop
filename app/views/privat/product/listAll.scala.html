@@ -1,6 +1,6 @@
 @(products: List[models.Product])
 
-@privat.privateLookAndFeel("Showing products", 1) {
+@views.html.privat.privateLookAndFeel("Showing products", 1) {
 	<div class="col-md-12">
 		<h2>Products</h2>
 		
@@ -15,7 +15,7 @@
 							<td>Cost</td>
 							<td>Rrp</td>
 							<td>Stock</td>
-							<td class="tableIconCRUDFixSize"><span><a href="@routes.ProductController.showAddProduct()" data-toggle="tooltip" data-placement="top" title="New Product"><i class="glyphicon glyphicon-plus"></i></a></span></td>
+							<td class="tableIconCRUDFixSize"><span><a href="@controllers.privat.routes.ProductController.showAddProduct()" data-toggle="tooltip" data-placement="top" title="New Product"><i class="glyphicon glyphicon-plus"></i></a></span></td>
 						</tr>
 					</thead>
 					<tbody>
@@ -28,17 +28,17 @@
 								<td>@product.getRrp</td>
 								<td>@product.getProductStock</td>
 								<td>
-									<a href="@routes.ProductController.showOneProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="View details">
+									<a href="@controllers.privat.routes.ProductController.showOneProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="View details">
 										<i class="glyphicon glyphicon-eye-open"></i>
 									</a>
-									<a href="@routes.ProductController.showEditProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
+									<a href="@controllers.privat.routes.ProductController.showEditProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
 									<a href="javascript:del(@product.getId)" id="submit"  data-toggle="confirmation" data-placement="top" data-original-title title>
 										<i class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="right" title="Delete"></i>
 									</a>
 								</td>
 							</tr>
 						}
-						<form method="POST" id="delForm" action="@routes.ProductController.deleteProduct()">
+						<form method="POST" id="delForm" action="@controllers.privat.routes.ProductController.deleteProduct()">
 							<input type="hidden" id="productId" name="productId" value=""/>
 						</form>
 						<script type="text/javascript">

@@ -1,0 +1,55 @@
+@* listAll Template File *@
+@(cart : ShoppingCart)
+
+@views.html.publica.publicLookAndFeel("Showing shoppingCart", 4) {
+	<div class="col-md-12">
+		<h2>Shopping Cart</h2>
+		
+		<div class="generalTableHeight">		
+			<div class="table-responsive">
+				<form method="POST" id="form" action="@controllers.publica.routes.ShoppingCartController.updateCart">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<td>Id</td>
+								<td>Name</td>
+								<td>Description</td>
+								<td>Quantity<br><span id="info" class="red">(0 to delete)</span></td>
+								<td>Cost</td>
+								<td>Subtotal</td>
+							</tr>
+						</thead>
+						<tbody>
+							@for(detail <- cart.getShoppingCartDetails){ 
+								<tr>
+									<td>@detail.getProduct.getId</td>
+									<td>@detail.getProduct.getName</td>
+									<td>@detail.getProduct.getDescription</td>
+									<td>
+										<input type="text" class="form-control quantity miniCol" name="quantity" placeholder="@detail.getQuantity" value="@detail.getQuantity">
+									</td>
+									<td>@detail.getProduct.getCost</td>
+									<td>@detail.getSubTotal</td>
+								</tr>
+							}
+						</tbody>
+						<tfoot>
+							<td colspan=3>&nbsp;</td>
+							<td colspan=2><a id="update" href="#"><i id="green" class="glyphicon glyphicon-refresh"></i> Update Cart</a></td>
+							<td>Total: @cart.getCostTotal</td>
+						</tfoot>
+						<script type="text/javascript">
+							$("#update").click(function(e){
+								$("#form").submit();
+							});
+						</script>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-1">
+		
+	</div>
+	
+}

@@ -1,17 +1,21 @@
 package forms;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderForm {
 	private int id;
 	private int userId;
 	private String date;
 	private int status;
-	private int[] quantity;
-	private double[] cost;
-	private double[] rrp;
+	private List<Integer> productIds;
+	private List<String> productNames;
+	private List<Integer> quantitys;
+	private List<Double> costs;
+	private List<Double> rrps;
 
 	public OrderForm() {
+		productIds = new ArrayList<>();
 	}
 
 	public int getId() {
@@ -46,36 +50,75 @@ public class OrderForm {
 		this.status = status;
 	}
 
-	public int[] getQuantity() {
-		return quantity;
+	public int getQuantity(int i) {
+		return ((i >= 0 && i < quantitys.size())) ? quantitys.get(i)
+				: Integer.MIN_VALUE;
 	}
 
-	public void setQuantity(int[] quantity) {
-		this.quantity = quantity;
+	public double getCost(int i) {
+		return ((i >= 0 && i < costs.size())) ? costs.get(i) : Double.NaN;
 	}
 
-	public double[] getCost() {
-		return cost;
+	public double getRrp(int i) {
+		return ((i >= 0 && i < rrps.size())) ? rrps.get(i) : Double.NaN;
 	}
 
-	public void setCost(double[] cost) {
-		this.cost = cost;
+	public List<Integer> getProductIds() {
+		return productIds;
 	}
 
-	public double[] getRrp() {
-		return rrp;
+	public int getProductId(int i) {
+		return ((i >= 0 && i < productIds.size())) ? productIds.get(i)
+				: Integer.MIN_VALUE;
 	}
 
-	public void setRrp(double[] rrp) {
-		this.rrp = rrp;
+	public void setProductIds(List<Integer> productIds) {
+		this.productIds = productIds;
+	}
+
+	public String getProductName(int i) {
+		return ((i >= 0 && i < productNames.size())) ? productNames.get(i)
+				: null;
+	}
+
+	public List<String> getProductNames() {
+		return productNames;
+	}
+
+	public void setProductNames(List<String> productNames) {
+		this.productNames = productNames;
+	}
+
+	public List<Integer> getQuantitys() {
+		return quantitys;
+	}
+
+	public void setQuantitys(List<Integer> quantitys) {
+		this.quantitys = quantitys;
+	}
+
+	public List<Double> getCosts() {
+		return costs;
+	}
+
+	public void setCosts(List<Double> costs) {
+		this.costs = costs;
+	}
+
+	public List<Double> getRrps() {
+		return rrps;
+	}
+
+	public void setRrps(List<Double> rrps) {
+		this.rrps = rrps;
 	}
 
 	@Override
 	public String toString() {
 		return "OrderForm [id=" + id + ", userId=" + userId + ", date=" + date
-				+ ", status=" + status + ", quantity="
-				+ Arrays.toString(quantity) + ", cost=" + Arrays.toString(cost)
-				+ ", rrp=" + Arrays.toString(rrp) + "]";
+				+ ", status=" + status + ", productIds=" + productIds
+				+ ", productNames=" + productNames + ", quantitys=" + quantitys
+				+ ", costs=" + costs + ", rrps=" + rrps + "]";
 	}
 
 }

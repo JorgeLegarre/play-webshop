@@ -90,5 +90,4 @@ public final class ProductForm {
 				+ ", productStock=" + productStock + ", categories="
 				+ categories + "]";
 	}
-
 }

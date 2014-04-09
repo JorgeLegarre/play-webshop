@@ -1,7 +1,7 @@
 @* listAll Template File *@
 @(products :List[Product])
 
-@publica.publicLookAndFeel("Showing products", 1) {
+@views.html.publica.publicLookAndFeel("Showing products", 1) {
 	<div class="col-md-12">
 		<h2>Products</h2>
 		
@@ -14,6 +14,7 @@
 							<td>Name</td>
 							<td>Description</td>
 							<td>Cost</td>
+							<td class="miniCol">&nbsp;</td>
 							<td>&nbsp;</td>
 						</tr>
 					</thead>
@@ -25,16 +26,21 @@
 								<td>@product.getDescription</td>
 								<td>@product.getCost</td>
 								<td>
-									<a href="javascript:buy(@product.getId)">buy it now!</a>
+									<input type="text" class="form-control quantity" id="quantity@product.getId" placeholder="0"" value="0">
+								</td>
+								<td>
+									<a href="javascript:buy(@product.getId)">add to Cart</a>
 								</td>
 							</tr>
 						}
-						<form method="POST" id="buy" action="@routes.OrderPublicController.buy()"> 
-							<input type="hidden" id="productId" name="productId" value="1"/>
+						<form method="POST" id="buy" action="@controllers.publica.routes.ShoppingCartController.addToCart"> 
+							<input type="hidden" id="productId" name="productId" value="0"/>
+							<input type="hidden" id="quantity" name="quantity" value="0"/>
 						</form>
 						<script type="text/javascript">
 						function buy(id){
 							$("#productId").val(id);
+							$("#quantity").val($("#quantity"+id).val());
 							
 							$("#buy").submit();
 						}

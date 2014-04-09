@@ -7,6 +7,8 @@ import javax.persistence.Id;
 
 @Entity
 public final class OrderStatus {
+	public static final int FIRST_STATUS = 1;
+
 	@Id
 	@GeneratedValue
 	private int id;

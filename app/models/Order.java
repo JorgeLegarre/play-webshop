@@ -8,7 +8,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -33,7 +32,7 @@ public class Order {
 	@ManyToOne
 	private OrderStatus status;
 
-	@OneToMany(mappedBy = "order", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "order", cascade = { CascadeType.ALL }, orphanRemoval = true)
 	private List<OrderDetail> orderDetails;
 
 	public Order() {
@@ -142,8 +141,9 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", user=" + user + ", date=" + date
-				+ ", status=" + status + ", orderDetails=" + orderDetails + "]";
+		return "Order [id=" + id + ", user=" + user + ", date="
+				+ getDateString() + ", status=" + status + ", orderDetails="
+				+ orderDetails + "]";
 	}
 
 }

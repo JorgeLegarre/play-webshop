@@ -1,6 +1,6 @@
-@(order: models.Order, allStatus :List[OrderStatus], users :List[User])
+@(order: models.Order, allStatus :List[OrderStatus])
 
-@privat.privateLookAndFeel("Showing an order", 4) {
+@views.html.privat.privateLookAndFeel("Showing an order", 4) {
 	<div class="container">
 		<div class="row">
 			<div class="col-md-2">
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 		</div>
-		<form role="form" id="form" method="POST" action="@routes.OrderController.saveOrder()">
+		<form role="form" id="form" method="POST" action="@controllers.privat.routes.OrderController.saveOrder()">
 			<input type="hidden" name="id" value="@order.getId"></input>
 			<input type="hidden" name="userId" value="@order.getUser.getId"></input>
 			<input type="hidden" name="date" value="@order.getDateString"></input>
@@ -66,7 +66,7 @@
 					<div class="form-group">
 						<label for="user">User:</label>
 						<div>
-							<a href="@routes.UserController.showOneUser(order.getUser.getId)" data-toggle="tooltip" data-placement="top" title="View user">
+							<a href="@controllers.privat.routes.UserController.showOneUser(order.getUser.getId)" data-toggle="tooltip" data-placement="top" title="View user">
 								@order.getUser.getFirstname&nbsp;@order.getUser.getLastname&nbsp;(@order.getUser.getEmail)
 							</a>
 						</div>
@@ -92,8 +92,14 @@
 							<tbody>
 								@for(orderDetail <- order.getOrderDetails){
 									<tr>
-										<td>@orderDetail.getId.getProductId</td>
-										<td>@orderDetail.getName</td>
+										<td>
+											@orderDetail.getId.getProductId
+											<input type="hidden" name="productId" value="@orderDetail.getId.getProductId"></input>
+										</td>
+										<td>
+											<a href="@controllers.privat.routes.ProductController.showOneProduct(orderDetail.getId.getProductId)">@orderDetail.getName</a>
+											<input type="hidden" name="productName" value="@orderDetail.getName"></input>
+										</td>
 										<td>
 											<div class="view">
 												@orderDetail.getQuantity
@@ -152,7 +158,7 @@
 			<br>
 			<div class="row">
 				<div class="col-md-1">
-					<a href="@routes.OrderController.listAllOrders()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
+					<a href="@controllers.privat.routes.OrderController.listAllOrders()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
 				</div>
 				<div id="saveCancelButtons">
 					<div class="col-md-5">
@@ -163,7 +169,7 @@
 						
 					</div>
 					<div class="col-md-1">
-						<a href="@routes.OrderController.listAllOrders()"><i class="glyphicon glyphicon-remove red"></i> Cancel</a>
+						<a href="@controllers.privat.routes.OrderController.showOneOrder(order.getId)"><i class="glyphicon glyphicon-remove red"></i> Cancel</a>
 					</div>
 				</div>
 				<script type="text/javascript">

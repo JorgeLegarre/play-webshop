@@ -1,6 +1,6 @@
 @(category: models.Category)
 
-@privat.privateLookAndFeel("Showing a category", 2) {
+@views.html.privat.privateLookAndFeel("Showing a category", 2) {
 	<div class="container">
 		<div class="row">
 			<div class="col-md-2">
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 		</div>
-		<form role="form" id="form" method="POST" action="@routes.CategoryController.saveCategory()">
+		<form role="form" id="form" method="POST" action="@controllers.privat.routes.CategoryController.saveCategory()">
 			<input type="hidden" name="id" value="@category.getId"></input>
 			<div class="row">
 				<div class="col-md-6">
@@ -53,7 +53,6 @@
 									<td>Id</td>
 									<td>Name</td>
 									<td>Description</td>
-									<td>&nbsp;</td>
 								</tr>
 							</thead>
 							<tbody>
@@ -61,13 +60,12 @@
 									<input type="hidden" name="products" value="@product.getId">
 									<tr>
 										<td>@product.getId</td>
-										<td>@product.getName</td>
-										<td>@product.getDescription</td>
 										<td>
-											<a href="@routes.ProductController.showOneProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="View details">
-												<i class="glyphicon glyphicon-eye-open"></i>
+											<a href="@controllers.privat.routes.ProductController.showOneProduct(product.getId)">
+												@product.getName
 											</a>
 										</td>
+										<td>@product.getDescription</td>
 									</tr>
 								}								
 							</tbody>
@@ -89,7 +87,7 @@
 			<br>
 			<div class="row">
 				<div class="col-md-1">
-					<a href="@routes.CategoryController.listAllCategories()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
+					<a href="@controllers.privat.routes.CategoryController.listAllCategories()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
 				</div>
 				<div id="saveCancelButtons">
 					<div class="col-md-3">
@@ -100,7 +98,7 @@
 						
 					</div>
 					<div class="col-md-1">
-						<a href="@routes.CategoryController.listAllCategories()"><i class="glyphicon glyphicon-remove red"></i> Cancel</a>
+						<a href="@controllers.privat.routes.CategoryController.showOneCategory(category.getId)"><i class="glyphicon glyphicon-remove red"></i> Cancel</a>
 					</div>
 				</div>
 				<script type="text/javascript">

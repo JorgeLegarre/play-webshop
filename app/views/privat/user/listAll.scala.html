@@ -1,6 +1,6 @@
 @(users: List[models.User])
 
-@privat.privateLookAndFeel("Showing users", 3) {
+@views.html.privat.privateLookAndFeel("Showing users", 3) {
 	<div class="col-md-12">
 		<h2>Users</h2>
 		
@@ -13,10 +13,11 @@
 						<td>Name</td>
 						<td>Lastname</td>
 						<td>Admin</td>
-						<td class="tableIconCRUDFixSize"><span><a href="@routes.UserController.showAddUser()" data-toggle="tooltip" data-placement="top" title="New User"><i class="glyphicon glyphicon-plus"></i></a></span></td>
+						<td class="tableIconCRUDFixSize"><span><a href="@controllers.privat.routes.UserController.showAddUser()" data-toggle="tooltip" data-placement="top" title="New User"><i class="glyphicon glyphicon-plus"></i></a></span></td>
 					</tr>
 				</thead>
 				<tbody>
+				@session.get("username")
 					@for(user <- users){
 						<tr>
 							<td>@user.getId</td>
@@ -31,17 +32,19 @@
 							}
 							</td>
 							<td>
-								<a href="@routes.UserController.showOneUser(user.getId)" data-toggle="tooltip" data-placement="top" title="View details">
+								<a href="@controllers.privat.routes.UserController.showOneUser(user.getId)" data-toggle="tooltip" data-placement="top" title="View details">
 									<i class="glyphicon glyphicon-eye-open"></i>
 								</a>
-								<a href="@routes.UserController.showEditUser(user.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
-								<a href="javascript:del(@user.getId)" id="submit"  data-toggle="confirmation" data-placement="top" data-original-title title>
-									<i class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="right" title="Delete"></i>
-								</a>
+								<a href="@controllers.privat.routes.UserController.showEditUser(user.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
+								@if(user.getEmail != session.get("username")){
+									<a href="javascript:del(@user.getId)" id="submit"  data-toggle="confirmation" data-placement="top" data-original-title title>
+										<i class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="right" title="Delete"></i>
+									</a>
+								}
 							</td>
 						</tr>
 					}
-					<form method="POST" id="delForm" action="@routes.UserController.deleteUser()">
+					<form method="POST" id="delForm" action="@controllers.privat.routes.UserController.deleteUser()">
 						<input type="hidden" id="userId" name="userId" value=""/>
 					</form>
 					<script type="text/javascript">

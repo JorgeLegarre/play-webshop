@@ -1,7 +1,7 @@
 @* userOrder Template File *@
 @(order: Order)
 
-@publica.publicLookAndFeel("Showing Orders", 2) {
+@views.html.publica.publicLookAndFeel("Showing Orders", 2) {
 	<div class="container">
 		<div class="row">
 			<div class="col-md-2">
@@ -89,7 +89,7 @@
 			<br>
 			<div class="row">
 				<div class="col-md-1">
-					<a href="@routes.OrderPublicController.showUserOrders()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
+					<a href="@controllers.publica.routes.OrderPublicController.showUserOrders()"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
 				</div>
 				
 			</div>

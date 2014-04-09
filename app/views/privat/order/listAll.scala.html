@@ -1,6 +1,6 @@
 @(orders: List[models.Order])
 
-@privat.privateLookAndFeel("Showing orders", 4) {
+@views.html.privat.privateLookAndFeel("Showing orders", 4) {
 		<h2>Orders</h2>
 		<div class="generalTableHeight">
 			<table class="table table-striped">
@@ -25,10 +25,10 @@
 							<td>@order.getTotalCost</td>
 							<td>@order.getTotalRrp</td>
 							<td>
-								<a href="@routes.OrderController.showOneOrder(order.getId)" data-toggle="tooltip" data-placement="top" title="View details">
+								<a href="@controllers.privat.routes.OrderController.showOneOrder(order.getId)" data-toggle="tooltip" data-placement="top" title="View details">
 									<i class="glyphicon glyphicon-eye-open"></i>
 								</a>
-								<a href="@routes.OrderController.showEditOrder(order.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
+								<a href="@controllers.privat.routes.OrderController.showEditOrder(order.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
 							</td>
 						</tr>
 					}

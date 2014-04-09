@@ -1,6 +1,6 @@
 @(user: User)
 
-@publica.publicLookAndFeel("Showing Orders", 2) {
+@views.html.publica.publicLookAndFeel("Showing Orders", 2) {
 		<h2>Orders</h2>
 		<div class="generalTableHeight">
 			<table class="table table-striped">
@@ -23,7 +23,7 @@
 							<td>@order.getStatus.getDescription</td>
 							<td>@order.getTotalRrp</td>
 							<td>
-								<a href="@routes.OrderPublicController.showOneOrder(order.getId)" data-toggle="tooltip" data-placement="top" title="View details">
+								<a href="@controllers.publica.routes.OrderPublicController.showOneOrder(order.getId)" data-toggle="tooltip" data-placement="top" title="View details">
 									<i class="glyphicon glyphicon-eye-open"></i>
 								</a>
 							</td>
