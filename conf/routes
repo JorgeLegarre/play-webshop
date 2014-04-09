@@ -77,7 +77,11 @@ GET     /gantes/showCart                            controllers.publica.Shopping
 POST	/ganges/cart/add							controllers.publica.ShoppingCartController.addToCart()
 POST    /ganges/cart/updateCart                     controllers.publica.ShoppingCartController.updateCart()
 
+#category
+GET    /ganges/categories                           controllers.publica.CategoryPublicController.listAllCategories()
+GET    /ganges/category/:id                         controllers.publica.CategoryPublicController.showCategory(id: Int)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               				controllers.Assets.at(path="/public", file)
 
-GET 	/*a											controllers.ApplicationController.show404(a)                          
+GET 	/*a											controllers.ApplicationController.show404(a)          

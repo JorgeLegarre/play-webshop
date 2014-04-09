@@ -48,21 +48,21 @@ public class ShoppingCartController extends GeneralController {
 	public static Result updateCart() {
 		List<Integer> quantities = getListInt("quantity");
 
-		ShoppingCart cart = shoppingCartManager.findById(getCurrentUser()
-				.getId());
+		ShoppingCart cart = getCart();
 
-		if (cart == null) {
-			cart = new ShoppingCart();
-		}
+		updateQuantities(cart, quantities);
 
+		removeDeletedProducts(cart);
+
+		session().put("items", cart.getTotalItems() + "");
+
+		return redirect(routes.ShoppingCartController.showCart());
+	}
+
+	private static void removeDeletedProducts(ShoppingCart cart) {
 		List<ShoppingCartDetail> detailsToRemove = new ArrayList<>();
-		for (int i = 0; i < quantities.size(); i++) {
-			int newQuantity = quantities.get(i);
-			ShoppingCartDetail detail = cart.getShoppingCartDetails().get(i);
-
-			detail.setQuantity(newQuantity);
-
-			if (newQuantity <= 0) {
+		for (ShoppingCartDetail detail : cart.getShoppingCartDetails()) {
+			if (detail.getQuantity() <= 0) {
 				detailsToRemove.add(detail);
 			}
 
@@ -72,23 +72,52 @@ public class ShoppingCartController extends GeneralController {
 		if (cart.getShoppingCartDetails() == null) {
 			cart.setShoppingCartDetails(new ArrayList<ShoppingCartDetail>());
 		}
+	}
+
+	private static void updateQuantities(ShoppingCart cart,
+			List<Integer> quantities) {
+		for (int i = 0; i < quantities.size(); i++) {
+			int newQuantity = quantities.get(i);
+			ShoppingCartDetail detail = cart.getShoppingCartDetails().get(i);
+
+			detail.setQuantity(newQuantity);
+
+		}
+
+	}
+
+	private static ShoppingCart getCart() {
+		ShoppingCart cart = getCurrentUser().getShoppingCart();
+
+		if (cart == null) {
+			cart = new ShoppingCart();
+		}
+
+		return cart;
+	}
+
+	@Transactional
+	@Security.Authenticated(PublicAutenticatedController.class)
+	public static Result addToCart() {
+		ShoppingCartDetail detail = getDetail();
+
+		ShoppingCart cart = addDetailToCart(detail, getCurrentUser()
+				.getShoppingCart());
 
 		session().put("items", cart.getTotalItems() + "");
 
 		return redirect(routes.ShoppingCartController.showCart());
 	}
 
-	@Transactional
-	@Security.Authenticated(PublicAutenticatedController.class)
-	public static Result addToCart() {
-
+	private static ShoppingCartDetail getDetail() {
 		int productId = getParamInt("productId");
 		int quantity = getParamInt("quantity");
 
-		ShoppingCartDetail detail = createDetail(getCurrentUser().getId(),
-				productId, quantity);
+		return createDetail(getCurrentUser().getId(), productId, quantity);
+	}
 
-		ShoppingCart cart = getCurrentUser().getShoppingCart();
+	private static ShoppingCart addDetailToCart(ShoppingCartDetail detail,
+			ShoppingCart cart) {
 
 		if (isNewShoppingCart(cart)) {
 			cart = createShoppingCart(getCurrentUser(), detail);
@@ -96,18 +125,21 @@ public class ShoppingCartController extends GeneralController {
 
 		} else {
 			if (detailExist(detail, cart)) {
-				ShoppingCartDetail oldDetail = getOldDetail(detail, cart);
-				oldDetail.setQuantity(oldDetail.getQuantity()
-						+ detail.getQuantity());
+				addQuantityToOldDetail(detail, cart);
 
 			} else {
 				cart.getShoppingCartDetails().add(detail);
 			}
 		}
 
-		session().put("items", cart.getTotalItems() + "");
+		return cart;
+	}
 
-		return redirect(routes.ShoppingCartController.showCart());
+	private static void addQuantityToOldDetail(ShoppingCartDetail detail,
+			ShoppingCart cart) {
+		ShoppingCartDetail oldDetail = getOldDetail(detail, cart);
+		oldDetail.setQuantity(oldDetail.getQuantity() + detail.getQuantity());
+
 	}
 
 	private static ShoppingCartDetail getOldDetail(ShoppingCartDetail detail,

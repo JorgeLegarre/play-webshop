@@ -1,7 +1,7 @@
 @* userOrder Template File *@
 @(order: Order)
 
-@views.html.publica.publicLookAndFeel("Showing Orders", 2) {
+@views.html.publica.publicLookAndFeel("Showing Orders", 3) {
 	<div class="container">
 		<div class="row">
 			<div class="col-md-2">
@@ -51,7 +51,11 @@
 								@for(orderDetail <- order.getOrderDetails){
 									<tr>
 										<td>@orderDetail.getId.getProductId</td>
-										<td>@orderDetail.getName</td>
+										<td>
+											<a href="@controllers.publica.routes.ProductsPublicController.showProduct(orderDetail.getId.getProductId)">
+												@orderDetail.getName
+											</a>
+										</td>
 										<td>
 											<div class="view">
 												@orderDetail.getQuantity

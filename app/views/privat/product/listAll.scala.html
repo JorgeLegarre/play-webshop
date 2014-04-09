@@ -3,63 +3,69 @@
 @views.html.privat.privateLookAndFeel("Showing products", 1) {
 	<div class="col-md-12">
 		<h2>Products</h2>
-		
-		<div class="generalTableHeight">		
-			<div class="table-responsive">
-				<table class="table table-striped">
-					<thead>
+			
+		<div class="table-responsive">
+			<table class="table table-striped table_to_datatable">
+				<thead>
+					<tr>
+						<td>Id</td>
+						<td>Name</td>
+						<td>Description</td>
+						<td>Cost</td>
+						<td>Rrp</td>
+						<td>Stock</td>
+						<td class="tableIconCRUDFixSize"><span><a href="@controllers.privat.routes.ProductController.showAddProduct()" data-toggle="tooltip" data-placement="right" title="New Product"><i class="glyphicon glyphicon-plus"></i></a></span></td>
+					</tr>
+				</thead>
+				<tbody>
+					@for(product <- products){
 						<tr>
-							<td>Id</td>
-							<td>Name</td>
-							<td>Description</td>
-							<td>Cost</td>
-							<td>Rrp</td>
-							<td>Stock</td>
-							<td class="tableIconCRUDFixSize"><span><a href="@controllers.privat.routes.ProductController.showAddProduct()" data-toggle="tooltip" data-placement="top" title="New Product"><i class="glyphicon glyphicon-plus"></i></a></span></td>
+							<td>@product.getId</td>
+							<td>@product.getName</td>
+							<td class="setSizeOverflow300">
+								<span>
+									@product.getDescription
+								</span>
+							</td>
+							<td>@product.getCost</td>
+							<td>@product.getRrp</td>
+							<td>@product.getProductStock</td>
+							<td>
+								<a href="@controllers.privat.routes.ProductController.showOneProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="View details">
+									<i class="glyphicon glyphicon-eye-open"></i>
+								</a>
+								<a href="@controllers.privat.routes.ProductController.showEditProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
+								<a href="javascript:del(@product.getId)" id="submit"  data-toggle="confirmation" data-placement="top" data-original-title title>
+									<i class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="right" title="Delete"></i>
+								</a>
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						@for(product <- products){
-							<tr>
-								<td>@product.getId</td>
-								<td>@product.getName</td>
-								<td class="setSizeOverflow300">
-									<span>
-										@product.getDescription
-									</span>
-								</td>
-								<td>@product.getCost</td>
-								<td>@product.getRrp</td>
-								<td>@product.getProductStock</td>
-								<td>
-									<a href="@controllers.privat.routes.ProductController.showOneProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="View details">
-										<i class="glyphicon glyphicon-eye-open"></i>
-									</a>
-									<a href="@controllers.privat.routes.ProductController.showEditProduct(product.getId)" data-toggle="tooltip" data-placement="top" title="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
-									<a href="javascript:del(@product.getId)" id="submit"  data-toggle="confirmation" data-placement="top" data-original-title title>
-										<i class="glyphicon glyphicon-remove"  data-toggle="tooltip" data-placement="right" title="Delete"></i>
-									</a>
-								</td>
-							</tr>
-						}
-						<form method="POST" id="delForm" action="@controllers.privat.routes.ProductController.deleteProduct()">
-							<input type="hidden" id="productId" name="productId" value=""/>
-						</form>
-						<script type="text/javascript">
-						function del(id){
-							$("#productId").val(id);
-							$("#delForm").submit();
-						}
-						
-						$(function(){
-							$('[data-toggle="confirmation"]').confirmation({singleton:true});
-							$('[data-toggle="tooltip"]').tooltip();
-						});
-						</script>
-					</tbody>
-				</table>
-			</div>
+					}
+				</tbody>
+			</table>
 		</div>
 	</div>
+	<form method="POST" id="delForm" action="@controllers.privat.routes.ProductController.deleteProduct()">
+		<input type="hidden" id="productId" name="productId" value=""/>
+	</form>
+	<script type="text/javascript">
+	function del(id){
+		$("#productId").val(id);
+		$("#delForm").submit();
+	}
+	
+	$(function(){
+		$('[data-toggle="confirmation"]').confirmation({singleton:true});
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+	</script>	
+	<script type="text/javascript">
+		$(document).ready(function() {
+		    $('.table_to_datatable').dataTable({
+		    	"sScrollY": "442px",
+		    	"sPaginationType": "full_numbers"
+			});
+		} );
+	</script>
 }
 

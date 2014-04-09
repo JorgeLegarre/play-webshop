@@ -93,10 +93,15 @@ a.btn-default:hover{
 	width: 150px;
 }
 
+.tableIconCRUDFixSize a{
+	margin-left:35px;
+}
+
 .generalTableHeight{
 	height: 442px;
 	overflow: auto;
 }
+
 .reducedTableHeight{
 	height: 300px;
 	overflow: auto;
@@ -147,10 +152,6 @@ a.btn-default:hover{
 	border:2px solid black;
 	border-radius:15px;
 }
-.right{
-	position: relative;
-	float: right;
-}
 .left{
 	position: relative;
 	float: left;
@@ -170,3 +171,36 @@ td span{
 #noBorderTop{
 	border-top: 0px solid #ddd;
 }
+
+/* required to avoid jumping */
+#commentWrapper {
+  left: 450px;
+  position: absolute;
+  margin-left: 35px;
+  width: 280px;
+}
+
+#comment {
+  position: absolute;
+  top: 0;
+  /* just used to show how to include the margin in the effect */
+  margin-top: 20px;
+  border-top: 1px solid purple;
+  padding-top: 19px;
+}
+
+#comment.fixed {
+  position: fixed;
+  top: 0;
+}
+
+table.dataTable tr.odd td.sorting_1 {
+    background-color: #202020;
+}
+table.dataTable tr.even td.sorting_1 {
+    background-color: #454545;
+}
+.dataTables_filter input{
+	color:#777;
+}
+
