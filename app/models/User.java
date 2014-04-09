@@ -52,7 +52,7 @@ public class User implements Serializable {
 
 	private boolean isAdmin;
 
-	@OneToOne(mappedBy = "user", cascade = { CascadeType.ALL })
+	@OneToOne(mappedBy = "user", cascade = { CascadeType.ALL }, orphanRemoval = true)
 	ShoppingCart shoppingCart;
 
 	@OneToMany(mappedBy = "user", cascade = { CascadeType.ALL })

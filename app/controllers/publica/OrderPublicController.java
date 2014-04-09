@@ -1,16 +1,18 @@
 package controllers.publica;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import manager.OrderManager;
 import manager.OrderStatusManager;
-import manager.ProductManager;
+import manager.ShoppingCartManager;
 import manager.UserManager;
 import models.Order;
 import models.OrderDetail;
 import models.OrderDetail.Key;
 import models.OrderStatus;
-import models.Product;
+import models.ShoppingCartDetail;
 import models.User;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
@@ -20,7 +22,7 @@ import views.html.publica.orders.listUserOrders;
 import views.html.publica.orders.userOrder;
 import DAO.OrderDao;
 import DAO.OrderStatusDao;
-import DAO.ProductDao;
+import DAO.ShoppingCartDao;
 import DAO.UserDao;
 import controllers.GeneralController;
 
@@ -29,10 +31,10 @@ public class OrderPublicController extends GeneralController {
 			new OrderDao());
 	private final static UserManager userManager = new UserManager(
 			new UserDao());
-	private final static ProductManager productManager = new ProductManager(
-			new ProductDao());
 	private final static OrderStatusManager statusManager = new OrderStatusManager(
 			new OrderStatusDao());
+	private final static ShoppingCartManager shoppingCartManager = new ShoppingCartManager(
+			new ShoppingCartDao());
 
 	@Transactional
 	@Security.Authenticated(PublicAutenticatedController.class)
@@ -52,31 +54,51 @@ public class OrderPublicController extends GeneralController {
 
 	@Transactional
 	@Security.Authenticated(PublicAutenticatedController.class)
-	public static Result buy() {
+	public static Result placeOrder() {
+		Order order = getOrder();
+
+		orderManager.save(order);
+
+		session().put("items",
+				order.getUser().getShoppingCart().getTotalItems() + "");
+
+		return redirect(routes.OrderPublicController.showUserOrders());
+	}
+
+	private static Order getOrder() {
 		Order order = new Order();
 		order.setDate(DateUtils.reduceDate(new Date()));
 		order.setStatus(statusManager.findById(OrderStatus.FIRST_STATUS));
 		order.setUser(getCurrentUser());
 
-		int productId = getParamInt("productId");
-		Product product = productManager.findById(productId);
+		List<OrderDetail> details = getDetails(order);
+		order.setOrderDetails(details);
 
-		OrderDetail detail = new OrderDetail();
-		Key id = new OrderDetail.Key();
-		id.setProductId(productId);
-		id.setOrderId(order.getId());
-		detail.setOrder(order);
-		detail.setId(id);
-		detail.setName(product.getName());
-		detail.setCost(product.getCost());
-		detail.setRrp(product.getRrp());
-		detail.setQuantity(1);
+		order.getUser().getShoppingCart().getShoppingCartDetails().clear();
 
-		order.getOrderDetails().add(detail);
+		return order;
+	}
 
-		order = orderManager.save(order);
+	private static List<OrderDetail> getDetails(Order order) {
+		List<OrderDetail> details = new ArrayList<OrderDetail>();
 
-		return redirect(routes.OrderPublicController.showUserOrders());
+		for (ShoppingCartDetail scDetail : order.getUser().getShoppingCart()
+				.getShoppingCartDetails()) {
+			OrderDetail detail = new OrderDetail();
+			Key id = new Key();
+			id.setProductId(scDetail.getId().getProductId());
+			id.setOrderId(order.getId());
+			detail.setId(id);
+			detail.setOrder(order);
+			detail.setName(scDetail.getProduct().getName());
+			detail.setCost(scDetail.getProduct().getCost());
+			detail.setRrp(scDetail.getProduct().getRrp());
+			detail.setQuantity(scDetail.getQuantity());
+
+			details.add(detail);
+		}
+
+		return details;
 	}
 
 	private static User getCurrentUser() {

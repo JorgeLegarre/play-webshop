@@ -11,7 +11,6 @@
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<td>Id</td>
 								<td>Name</td>
 								<td>Description</td>
 								<td>Quantity<br><span id="info" class="red">(0 to delete)</span></td>
@@ -22,9 +21,16 @@
 						<tbody>
 							@for(detail <- cart.getShoppingCartDetails){ 
 								<tr>
-									<td>@detail.getProduct.getId</td>
-									<td>@detail.getProduct.getName</td>
-									<td>@detail.getProduct.getDescription</td>
+									<td>
+										<a href="@controllers.publica.routes.ProductsPublicController.showProduct(detail.getProduct.getId)">
+											@detail.getProduct.getName
+										</a>
+									</td>
+									<td class="setSizeOverflow300">
+										<span>
+											@detail.getProduct.getDescription
+										</span>
+									</td>
 									<td>
 										<input type="text" class="form-control quantity miniCol" name="quantity" placeholder="@detail.getQuantity" value="@detail.getQuantity">
 									</td>
@@ -34,15 +40,40 @@
 							}
 						</tbody>
 						<tfoot>
-							<td colspan=3>&nbsp;</td>
-							<td colspan=2><a id="update" href="#"><i id="green" class="glyphicon glyphicon-refresh"></i> Update Cart</a></td>
-							<td>Total: @cart.getCostTotal</td>
+							<tr>
+								<td colspan=2>&nbsp;</td>
+								<td colspan=2><a id="update" href="#"><i id="green" class="glyphicon glyphicon-refresh"></i> Update Cart</a></td>
+								<td>Total: @cart.getCostTotal</td>
+							</tr>
+							<tr>
+								<td colspan=4  id="noBorderTop">&nbsp;</td>
+								<td id="noBorderTop">
+									<button type="button" id="placeOrder" class="btn btn-default btn-xs">
+									  <span class="glyphicon glyphicon-thumbs-up"></span> Place Order
+									</button>
+								</td>
+							</tr>
 						</tfoot>
-						<script type="text/javascript">
-							$("#update").click(function(e){
-								$("#form").submit();
-							});
-						</script>
+						@if(cart.getShoppingCartDetails.size >0){
+							<script type="text/javascript">
+								$("#update").click(function(e){
+									$("#form").submit();
+								});
+								$("#placeOrder").click(function(e){
+									$("#form").attr("action","@controllers.publica.routes.OrderPublicController.placeOrder");
+									$("#form").submit();
+								});
+							</script>
+						}else{
+							<script type="text/javascript">
+								$("#update").click(function(e){
+									alert("Shopping cart is empty");
+								});
+								$("#placeOrder").click(function(e){
+									alert("Shopping cart is empty");
+								});
+							</script>
+						}
 					</table>
 				</form>
 			</div>

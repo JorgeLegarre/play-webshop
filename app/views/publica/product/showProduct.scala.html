@@ -1,0 +1,62 @@
+@(product : Product)
+
+@views.html.publica.publicLookAndFeel("Showing a product", 1) {
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<h2>@product.getName</h2>
+				</div>
+			</div>	
+		</div>
+		<div class="row">
+			<div class="col-md-2 left">
+				<div class="productImg">
+					<img class="img" src="@routes.Assets.at("img/noImage.png")">
+				</div>
+			</div>
+			<div class="col-md-1 left">
+				&nbsp;
+			</div>
+			<div class="col-md-5 left">
+				<div>
+					<h3>Price:</h3>
+					@product.getRrp :-
+				</div>
+				<br>
+				<div>
+					<div class="left quantity">
+						<input type="number" class="form-control" id="quantityToOrder" placeholder="0"" value="">
+					</div>
+					<div class="left">
+						&nbsp;&nbsp;&nbsp;<a href="#" id="addCart">add to Cart</a>
+					</div>
+				</div>
+				<br><br>
+				<div>
+					@product.getProductStock products in Stock
+				</div>
+				<div>
+					<h3>Description</h3>
+					@product.getDescription
+				</div>
+			</div>
+		</div>
+		<br><br>
+		<div class="row">
+			<div class="col-md-1">
+				<a href="@controllers.publica.routes.ProductsPublicController.listAllProducts"><i class="glyphicon glyphicon-circle-arrow-left"></i> Back</a>
+			</div>
+		</div>
+		<form method="POST" id="form" action="@controllers.publica.routes.ShoppingCartController.addToCart"> 
+			<input type="hidden" id="productId" name="productId" value="@product.getId"/>
+			<input type="hidden" id="quantity" name="quantity" value="0"/>
+		</form>
+		<script type="text/javascript">
+			$("#addCart").click(function(e){
+				$("#quantity").val($("#quantityToOrder").val());
+			    $("#form").submit();
+			});
+		</script>
+	</div>
+}

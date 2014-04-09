@@ -65,15 +65,17 @@ GET     /ganges/users/add            				controllers.publica.UserPublicControlle
 
 #products
 GET		/ganges/products							controllers.publica.ProductsPublicController.listAllProducts()
+GET     /ganges/products/:id                        controllers.publica.ProductsPublicController.showProduct(id: Int)
 
 #orders
 GET     /ganges/orders/:id 							controllers.publica.OrderPublicController.showOneOrder(id: Int)
 GET     /ganges/orders                            	controllers.publica.OrderPublicController.showUserOrders()
+POST    /ganges/orders/new                          controllers.publica.OrderPublicController.placeOrder()
 													
 #cart
 GET     /gantes/showCart                            controllers.publica.ShoppingCartController.showCart()
 POST	/ganges/cart/add							controllers.publica.ShoppingCartController.addToCart()
-POST    /ganges/cart/updateCart                          controllers.publica.ShoppingCartController.updateCart()
+POST    /ganges/cart/updateCart                     controllers.publica.ShoppingCartController.updateCart()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               				controllers.Assets.at(path="/public", file)
