@@ -6,6 +6,7 @@ import java.util.List;
 
 import manager.OrderManager;
 import manager.OrderStatusManager;
+import manager.ShoppingCartManager;
 import manager.UserManager;
 import models.Order;
 import models.OrderDetail;
@@ -21,6 +22,7 @@ import views.html.publica.orders.listUserOrders;
 import views.html.publica.orders.userOrder;
 import DAO.OrderDao;
 import DAO.OrderStatusDao;
+import DAO.ShoppingCartDao;
 import DAO.UserDao;
 import controllers.GeneralController;
 
@@ -31,6 +33,8 @@ public class OrderPublicController extends GeneralController {
 			new UserDao());
 	private final static OrderStatusManager statusManager = new OrderStatusManager(
 			new OrderStatusDao());
+	private final static ShoppingCartManager shoppingCartManager = new ShoppingCartManager(
+			new ShoppingCartDao());
 
 	@Transactional
 	@Security.Authenticated(PublicAutenticatedController.class)
@@ -53,12 +57,19 @@ public class OrderPublicController extends GeneralController {
 	public static Result placeOrder() {
 		Order order = getOrder();
 
+		voidShoppingCart(order);
+
 		orderManager.save(order);
 
-		session().put("items",
-				order.getUser().getShoppingCart().getTotalItems() + "");
+		session().put("items", "0");
 
 		return redirect(routes.OrderPublicController.showUserOrders());
+	}
+
+	private static void voidShoppingCart(Order order) {
+		int id = order.getUser().getShoppingCart().getId();
+		order.getUser().setShoppingCart(null);
+		shoppingCartManager.removeById(id);
 	}
 
 	private static Order getOrder() {
@@ -69,8 +80,6 @@ public class OrderPublicController extends GeneralController {
 
 		List<OrderDetail> details = getDetails(order);
 		order.setOrderDetails(details);
-
-		order.getUser().getShoppingCart().getShoppingCartDetails().clear();
 
 		return order;
 	}
