@@ -5,9 +5,32 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import play.data.validation.ValidationError;
 import play.mvc.Controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public abstract class GeneralController extends Controller {
+
+	protected static Double getParamDouble(String parameterName) {
+		List<Double> params = getListDouble(parameterName);
+
+		if (params.size() > 0) {
+			return params.get(0);
+		}
+
+		return 0.0;
+	}
+
+	protected static String getParamString(String parameterName) {
+		List<String> params = getListString(parameterName);
+
+		if (params.size() > 0) {
+			return params.get(0);
+		}
+
+		return "";
+	}
 
 	protected static int getParamInt(String parameterName) {
 		List<Integer> params = getListInt(parameterName);
@@ -16,7 +39,7 @@ public abstract class GeneralController extends Controller {
 			return params.get(0);
 		}
 
-		return -1;
+		return 0;
 	}
 
 	protected static boolean getParamBoolean(String parameterName) {
@@ -37,7 +60,11 @@ public abstract class GeneralController extends Controller {
 		List<Double> retorno = new ArrayList<>();
 		if (nameParameters != null) {
 			for (String param : nameParameters) {
-				retorno.add(Double.parseDouble(param));
+				try {
+					retorno.add(Double.parseDouble(param));
+				} catch (Exception e) {
+
+				}
 			}
 		}
 		return retorno;
@@ -50,7 +77,11 @@ public abstract class GeneralController extends Controller {
 		List<Integer> retorno = new ArrayList<>();
 		if (nameParameters != null) {
 			for (String param : nameParameters) {
-				retorno.add(Integer.parseInt(param));
+				try {
+					retorno.add(Integer.parseInt(param));
+				} catch (Exception e) {
+
+				}
 			}
 		}
 		return retorno;
@@ -66,6 +97,17 @@ public abstract class GeneralController extends Controller {
 
 	protected static void enableEditionMode() {
 		flash().put("edit", "yes");
+	}
+
+	protected static void prepareMsgErrors(
+			Map<String, List<ValidationError>> errors, JsonNode errorsAsJson) {
+		for (final String propertyName : errors.keySet()) {
+
+			String errorMessage = errorsAsJson.findValue(propertyName).get(0)
+					.asText().replace('[', ' ').replace(']', ' ');
+
+			flash().put(propertyName + "-error", errorMessage);
+		}
 	}
 
 }

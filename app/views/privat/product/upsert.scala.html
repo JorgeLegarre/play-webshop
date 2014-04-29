@@ -11,7 +11,7 @@
 					<div id="editPencil">
 						<i id="editModeIcon" class="glyphicon glyphicon-pencil yellow"></i>
 						<a id="viewModeIcon" href="#" data-toggle="tooltip" data-placement="top" title="Edit">
-							<i class="glyphicon glyphicon-lock yellow" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+							<i class="glyphicon glyphicon-lock yellow"></i>
 						</a>
 						<script type="text/javascript">
 							$(function(){
@@ -31,8 +31,11 @@
 			<div class="row">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label for="name">Product Name:</label>
+						<label for="name">Product Name*:</label>
 						<input type="text" class="form-control" id="name" name="name" placeholder="Product Name"" value="@product.getName" disabled>
+						@if(flash.containsKey("name-error")){
+							 <span class="error">@flash.get("name-error")</span>
+						}
 					</div>
 				</div>	
 			</div>
@@ -41,28 +44,40 @@
 					<div class="form-group">
 						<label for="description">Product Description:</label>
 						<textarea rows="3" class="form-control" id="description" name="description" placeholder="Product Description" disabled>@product.getDescription</textarea>
+						@if(flash.containsKey("description-error")){
+							 <span class="error">@flash.get("description-error")</span>
+						}
 					</div>
 				</div>	
 			</div>
 			<div class="row">
 				<div class="col-md-3">
 					<div class="form-group">
-						<label for="cost">Product Cost:</label> 
+						<label for="cost">Product Cost*:</label> 
 						<input type="number" class="form-control" id="cost" name="cost" placeholder="Product Cost" min="0" value="@product.getCost" disabled>
+						@if(flash.containsKey("cost-error")){
+							 <span class="error">@flash.get("cost-error")</span>
+						}
 					</div>
 				</div>
 				<div class="col-md-3">	
 					<div class="form-group">
-						<label for="rrp">Product Rrp:</label>
+						<label for="rrp">Product Rrp*:</label>
 						<input type="number" class="form-control" id="rrp" name="rrp" placeholder="Product Rrp" min="0" value="@product.getRrp" disabled>
+						@if(flash.containsKey("rrp-error")){
+							 <span class="error">@flash.get("rrp-error")</span>
+						}
 					</div>
 				</div>	
 			</div>
 			<div class="row">
 				<div class="col-md-3">
 					<div class="form-group">
-						<label for="productStock">Product Stock:</label>
+						<label for="productStock">Product Stock*:</label>
 						<input type="number" class="form-control" id="productStock" name="productStock" min="0" step="1" placeholder="Product Stock"" value="@product.getProductStock" disabled>
+						@if(flash.containsKey("productStock-error")){
+							 <span class="error">@flash.get("productStock-error")</span>
+						}
 					</div>
 				</div>	
 			</div>

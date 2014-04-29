@@ -3,7 +3,6 @@ package controllers.privat;
 import java.util.ArrayList;
 import java.util.List;
 
-import controllers.GeneralController;
 import manager.CategoryManager;
 import manager.ProductManager;
 import models.Category;
@@ -16,6 +15,7 @@ import views.html.privat.product.listAll;
 import views.html.privat.product.upsert;
 import DAO.CategoryDao;
 import DAO.ProductDao;
+import controllers.GeneralController;
 import forms.ProductForm;
 
 public final class ProductController extends GeneralController {
@@ -76,9 +76,26 @@ public final class ProductController extends GeneralController {
 	public static Result saveProduct() {
 		Product product = parseForm();
 
+		if (formHasErrors()) {
+			prepareMsgErrors();
+
+			enableEditionMode();
+			return showProduct(product);
+		}
+
 		productManager.save(product);
 
 		return redirect(routes.ProductController.listAllProducts());
+	}
+
+	private static boolean formHasErrors() {
+		return Form.form(ProductForm.class).bindFromRequest().hasErrors();
+	}
+
+	private static void prepareMsgErrors() {
+		Form<ProductForm> form = Form.form(ProductForm.class).bindFromRequest();
+
+		prepareMsgErrors(form.errors(), form.errorsAsJson());
 	}
 
 	private static Result showProduct(Product product) {
@@ -93,19 +110,16 @@ public final class ProductController extends GeneralController {
 	}
 
 	private static Product parseForm() {
-		Form<ProductForm> forms = Form.form(ProductForm.class);
-		ProductForm productForm = forms.bindFromRequest().get();
-		productForm.setCategories(getListInt("categories"));
+		Product product = new Product();
+		product.setId(getParamInt("id"));
+		product.setName(getParamString("name"));
+		product.setDescription(getParamString("description"));
+		product.setCost(getParamDouble("cost"));
+		product.setRrp(getParamDouble("rrp"));
+		product.setProductStock(getParamInt("productStock"));
+		product.setCategories(parseCategories(getListInt("categories")));
 
-		return parseForm(productForm);
-	}
-
-	private static Product parseForm(ProductForm productForm) {
-		List<Category> categories = parseCategories(productForm.getCategories());
-
-		return new Product(productForm.getId(), productForm.getName(),
-				productForm.getDescription(), productForm.getCost(),
-				productForm.getRrp(), productForm.getProductStock(), categories);
+		return product;
 	}
 
 	private static List<Category> parseCategories(List<Integer> categories) {

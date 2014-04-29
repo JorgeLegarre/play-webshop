@@ -3,13 +3,32 @@ package forms;
 import java.util.ArrayList;
 import java.util.List;
 
+import play.data.validation.Constraints.MaxLength;
+import play.data.validation.Constraints.Min;
+import play.data.validation.Constraints.Required;
+
 public final class ProductForm {
 	private int id;
+
+	@Required
+	@MaxLength(255)
 	private String name;
+
+	@MaxLength(255)
 	private String description;
+
+	@Required
+	@Min(0)
 	private double cost;
+
+	@Required
+	@Min(0)
 	private double rrp;
+
+	@Required
+	@Min(0)
 	private int productStock;
+
 	private List<Integer> categories;
 
 	public ProductForm() {
