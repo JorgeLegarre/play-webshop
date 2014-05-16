@@ -4,7 +4,6 @@ import java.util.List;
 
 import manager.CategoryManager;
 import models.Category;
-import play.data.Form;
 import play.db.jpa.Transactional;
 import play.libs.Json;
 import play.mvc.Result;
@@ -13,7 +12,6 @@ import views.html.privat.category.listAll;
 import views.html.privat.category.upsert;
 import DAO.CategoryDao;
 import controllers.GeneralController;
-import forms.CategoryForm;
 
 public class CategoryController extends GeneralController {
 
@@ -102,6 +100,7 @@ public class CategoryController extends GeneralController {
 	@Transactional
 	@Security.Authenticated(RestAutenticatedController.class)
 	public static Result saveCategoryRest() {
+
 		Category category = parseForm();
 
 		categoryManager.save(category);
@@ -125,14 +124,11 @@ public class CategoryController extends GeneralController {
 	}
 
 	private static Category parseForm() {
-		Form<CategoryForm> forms = Form.form(CategoryForm.class);
-		CategoryForm autoForm = forms.bindFromRequest().get();
+		Category category = new Category();
+		category.setId(getParamInt("id"));
+		category.setName(getParamString("name"));
 
-		return parseForm(autoForm);
-	}
-
-	private static Category parseForm(CategoryForm categoryForm) {
-		return new Category(categoryForm.getId(), categoryForm.getName());
+		return category;
 	}
 
 }

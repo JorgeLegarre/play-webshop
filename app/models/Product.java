@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 
 @Entity
 public class Product {
+	public final static String NO_IMAGE = "assets/img/noImage.png";
 	public static int DEFAULT_PRODUCT_ID = 0;
 
 	@Id
@@ -48,7 +49,7 @@ public class Product {
 	public Product(int id, String name, String description, double cost,
 			double rrp, int productStock, List<Category> categories) {
 		super();
-		this.id = id;
+		this.id = "".equals(id) ? DEFAULT_PRODUCT_ID : id;
 		this.name = name;
 		this.description = description;
 		this.cost = cost;
@@ -121,7 +122,7 @@ public class Product {
 	}
 
 	public String getPicture() {
-		return picture;
+		return picture == null || "".equals(picture) ? NO_IMAGE : picture;
 	}
 
 	public void setPicture(String picture) {

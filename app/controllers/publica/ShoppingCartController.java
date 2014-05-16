@@ -163,10 +163,7 @@ public class ShoppingCartController extends GeneralController {
 	private static void addQuantityToOldDetail(ShoppingCartDetail detail,
 			ShoppingCart cart) {
 		ShoppingCartDetail oldDetail = getOldDetail(detail, cart);
-		System.out.println("old " + oldDetail);
-		System.out.println(detail);
-		System.out.println(cart.getShoppingCartDetails().indexOf(detail));
-		System.out.println(oldDetail.getQuantity() + detail.getQuantity());
+
 		oldDetail.setQuantity(oldDetail.getQuantity() + detail.getQuantity());
 
 	}

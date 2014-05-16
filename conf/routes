@@ -95,6 +95,11 @@ PUT 	/admin/rest/category						controllers.privat.CategoryController.saveCategor
 GET 	/admin/rest/products						controllers.privat.ProductController.listAllProductsRest()
 GET 	/admin/rest/product/:id						controllers.privat.ProductController.getProductRest(id:Int)
 PUT 	/admin/rest/product							controllers.privat.ProductController.saveProductRest()
+GET		/admin/rest/imagePaths						controllers.privat.ProductController.getImagePathsRest()
+
+#order
+GET 	/admin/rest/nOrders							controllers.privat.OrderController.getNOrdersRest() 
+GET     /admin/rest/orders							controllers.privat.OrderController.getOrdersRest()
 
 #USER
 #product

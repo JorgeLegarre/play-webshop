@@ -122,6 +122,14 @@ public final class ProductController extends GeneralController {
 		return ok(Json.toJson(true));
 	}
 
+	@Transactional
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result getImagePathsRest() {
+		List<String> imagePaths = productManager.getImagePaths();
+
+		return ok(Json.toJson(imagePaths));
+	}
+
 	private static void setNullToProductsOfCategories(List<Product> products) {
 		for (Product product : products) {
 			setNullToProductCategories(product);
@@ -166,6 +174,7 @@ public final class ProductController extends GeneralController {
 		product.setRrp(getParamDouble("rrp"));
 		product.setProductStock(getParamInt("productStock"));
 		product.setCategories(parseCategories(getListInt("categories")));
+		product.setPicture(getParamString("picture"));
 
 		return product;
 	}

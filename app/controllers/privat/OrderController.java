@@ -13,6 +13,7 @@ import models.OrderStatus;
 import models.User;
 import play.data.Form;
 import play.db.jpa.Transactional;
+import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
 import utils.DateUtils;
@@ -67,6 +68,46 @@ public final class OrderController extends GeneralController {
 		orderManager.save(order);
 
 		return redirect(routes.OrderController.listAllOrders());
+
+	}
+
+	@Transactional
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result getNOrdersRest() {
+		return ok(Json.toJson(orderManager.getNOrders()));
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result getOrdersRest() {
+		List<Order> orders = orderManager.listAll();
+		serUserOrdersToNull(orders);
+		serOrderDetailsOrdersToNull(orders);
+		setUserShoppingCartsToNull(orders);
+		return ok(Json.toJson(orders));
+	}
+
+	private static void setUserShoppingCartsToNull(List<Order> orders) {
+		for (Order order : orders) {
+			order.getUser().setShoppingCart(null);
+		}
+
+	}
+
+	private static void serOrderDetailsOrdersToNull(List<Order> orders) {
+		for (Order order : orders) {
+			List<OrderDetail> ods = order.getOrderDetails();
+			for (OrderDetail od : ods) {
+				od.setOrder(null);
+			}
+		}
+
+	}
+
+	private static void serUserOrdersToNull(List<Order> orders) {
+		for (Order order : orders) {
+			order.getUser().setOrders(null);
+		}
 
 	}
 

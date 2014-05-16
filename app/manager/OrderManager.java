@@ -7,6 +7,7 @@ import models.Order;
 import models.OrderDetail;
 import models.Product;
 import DAO.GenericJpaDao;
+import DAO.OrderDao;
 import DAO.ProductDao;
 
 public final class OrderManager extends GeneralManager<Integer, Order> {
@@ -30,6 +31,10 @@ public final class OrderManager extends GeneralManager<Integer, Order> {
 		removeDetailsWithZeroQuantity(order);
 
 		return super.save(order);
+	}
+
+	public int getNOrders() {
+		return ((OrderDao) dao).getNOrders();
 	}
 
 	private void updateProductsStock(List<OrderDetail> oldOrderDetails,

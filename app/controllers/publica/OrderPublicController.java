@@ -72,13 +72,13 @@ public class OrderPublicController extends GeneralController {
 	@Security.Authenticated(RestAutenticatedController.class)
 	public static Result placeOrderRest() {
 		Order order = getOrder();
-		System.out.println("order" + 1);
+
 		voidShoppingCart(order.getUser());
-		System.out.println("order" + 2);
+
 		orderManager.save(order);
-		System.out.println("order" + 3);
+
 		session().put("items", "0");
-		System.out.println("order" + 4);
+
 		return ok(Json.toJson(true));
 	}
 

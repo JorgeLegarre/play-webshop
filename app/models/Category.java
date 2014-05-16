@@ -32,7 +32,7 @@ public class Category {
 	}
 
 	public Category(int id, String name) {
-		this.id = id;
+		this.id = "".equals(id) ? DEFAULT_ID : id;
 		this.name = name;
 	}
 
