@@ -16,23 +16,23 @@ public final class ShoppingCartDetail {
 
 		private static final long serialVersionUID = 20140318;
 
-		private int userId;
+		private int shoppingCartId;
 		private int productId;
 
 		public Key() {
 		}
 
-		public Key(int userId, int productId) {
-			this.userId = userId;
+		public Key(int shoppingCartId, int productId) {
+			this.shoppingCartId = shoppingCartId;
 			this.productId = productId;
 		}
 
-		public int getUserId() {
-			return userId;
+		public int getShoppingCartId() {
+			return shoppingCartId;
 		}
 
-		public void setUserId(int userId) {
-			this.userId = userId;
+		public void setShoppingCartId(int userId) {
+			this.shoppingCartId = userId;
 		}
 
 		public int getProductId() {
@@ -48,7 +48,7 @@ public final class ShoppingCartDetail {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + productId;
-			result = prime * result + userId;
+			result = prime * result + shoppingCartId;
 			return result;
 		}
 
@@ -63,14 +63,15 @@ public final class ShoppingCartDetail {
 			Key other = (Key) obj;
 			if (productId != other.productId)
 				return false;
-			if (userId != other.userId)
+			if (shoppingCartId != other.shoppingCartId)
 				return false;
 			return true;
 		}
 
 		@Override
 		public String toString() {
-			return "Key [userId=" + userId + ", productId=" + productId + "]";
+			return "Key [shoppingCartId=" + shoppingCartId + ", productId="
+					+ productId + "]";
 		}
 
 	}

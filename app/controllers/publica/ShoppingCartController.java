@@ -11,6 +11,7 @@ import models.ShoppingCartDetail;
 import models.ShoppingCartDetail.Key;
 import models.User;
 import play.db.jpa.Transactional;
+import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.publica.cart.listCart;
@@ -18,6 +19,7 @@ import DAO.ProductDao;
 import DAO.ShoppingCartDao;
 import DAO.UserDao;
 import controllers.GeneralController;
+import controllers.privat.RestAutenticatedController;
 
 public class ShoppingCartController extends GeneralController {
 	private final static ShoppingCartManager shoppingCartManager = new ShoppingCartManager(
@@ -30,8 +32,7 @@ public class ShoppingCartController extends GeneralController {
 	@Transactional
 	@Security.Authenticated(PublicAutenticatedController.class)
 	public static Result showCart() {
-		ShoppingCart cart = shoppingCartManager.findById(getCurrentUser()
-				.getId());
+		ShoppingCart cart = getCurrentUser().getShoppingCart();
 
 		if (cart == null) {
 			cart = new ShoppingCart();
@@ -99,45 +100,73 @@ public class ShoppingCartController extends GeneralController {
 	@Transactional
 	@Security.Authenticated(PublicAutenticatedController.class)
 	public static Result addToCart() {
-		ShoppingCartDetail detail = getDetail();
-
-		ShoppingCart cart = addDetailToCart(detail, getCurrentUser()
-				.getShoppingCart());
-
-		session().put("items", cart.getTotalItems() + "");
+		doAddToCart();
 
 		return redirect(routes.ShoppingCartController.showCart());
 	}
 
-	private static ShoppingCartDetail getDetail() {
+	private static void doAddToCart() {
+		User currentUser = getCurrentUser();
+
+		ShoppingCart cart = getCart(currentUser);
+
+		ShoppingCartDetail detail = getDetail(cart.getId(), currentUser);
+
+		addDetailToCart(cart, detail);
+
+		session().put("items", cart.getTotalItems() + "");
+
+	}
+
+	private static ShoppingCart getCart(User currentUser) {
+		ShoppingCart cart = null;
+		if (currentUser.getShoppingCart() == null) {
+			cart = new ShoppingCart();
+			cart.setUser(currentUser);
+			cart = shoppingCartManager.save(cart);
+		} else {
+			cart = currentUser.getShoppingCart();
+		}
+		return cart;
+	}
+
+	@Transactional
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result addToCartRest() {
+		// void cart we void the cart because in mobile only is allow 1 line
+		if (getCurrentUser().getShoppingCart() != null) {
+			voidShoppingCart(getCurrentUser());
+		}
+
+		doAddToCart();
+
+		return ok(Json.toJson(true));
+	}
+
+	private static ShoppingCartDetail getDetail(int cartId, User currentUser) {
 		int productId = getParamInt("productId");
 		int quantity = getParamInt("quantity");
 
-		return createDetail(getCurrentUser().getId(), productId, quantity);
+		return createDetail(cartId, productId, quantity);
 	}
 
-	private static ShoppingCart addDetailToCart(ShoppingCartDetail detail,
-			ShoppingCart cart) {
-
-		if (isNewShoppingCart(cart)) {
-			cart = createShoppingCart(getCurrentUser(), detail);
-			shoppingCartManager.save(cart);
+	private static void addDetailToCart(ShoppingCart cart,
+			ShoppingCartDetail detail) {
+		if (detailExist(detail, cart)) {
+			addQuantityToOldDetail(detail, cart);
 
 		} else {
-			if (detailExist(detail, cart)) {
-				addQuantityToOldDetail(detail, cart);
-
-			} else {
-				cart.getShoppingCartDetails().add(detail);
-			}
+			cart.getShoppingCartDetails().add(detail);
 		}
-
-		return cart;
 	}
 
 	private static void addQuantityToOldDetail(ShoppingCartDetail detail,
 			ShoppingCart cart) {
 		ShoppingCartDetail oldDetail = getOldDetail(detail, cart);
+		System.out.println("old " + oldDetail);
+		System.out.println(detail);
+		System.out.println(cart.getShoppingCartDetails().indexOf(detail));
+		System.out.println(oldDetail.getQuantity() + detail.getQuantity());
 		oldDetail.setQuantity(oldDetail.getQuantity() + detail.getQuantity());
 
 	}
@@ -153,23 +182,13 @@ public class ShoppingCartController extends GeneralController {
 		return cart.getShoppingCartDetails().indexOf(detail) >= 0;
 	}
 
-	private static ShoppingCart createShoppingCart(User currentUser,
-			ShoppingCartDetail detail) {
-
-		ShoppingCart cart = new ShoppingCart();
-		cart.setUser(getCurrentUser());
-		cart.getShoppingCartDetails().add(detail);
-
-		return cart;
-	}
-
 	private static ShoppingCartDetail createDetail(int id, int productId,
 			int quantity) {
 		ShoppingCartDetail detail = new ShoppingCartDetail();
 
 		Key key = new Key();
 		key.setProductId(productId);
-		key.setUserId(getCurrentUser().getId());
+		key.setShoppingCartId(id);
 
 		detail.setId(key);
 		detail.setProduct(productManager.findById(productId));
@@ -178,12 +197,14 @@ public class ShoppingCartController extends GeneralController {
 		return detail;
 	}
 
-	private static boolean isNewShoppingCart(ShoppingCart cart) {
-		return cart == null;
+	private static User getCurrentUser() {
+		String email = session().get("email");
+		return userManager.findByEmail(email);
 	}
 
-	private static User getCurrentUser() {
-		String email = session().get("username");
-		return userManager.findByEmail(email);
+	private static void voidShoppingCart(User user) {
+		int id = user.getShoppingCart().getId();
+		user.setShoppingCart(null);
+		shoppingCartManager.removeById(id);
 	}
 }

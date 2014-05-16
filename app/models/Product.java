@@ -37,8 +37,12 @@ public class Product {
 	@JoinTable(name = "Product_Category", joinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "category_id", referencedColumnName = "id") })
 	private List<Category> categories;
 
+	@Column(columnDefinition = "varchar(255) default 'assets/img/noImage.png'")
+	private String picture;
+
 	public Product() {
 		categories = new ArrayList<Category>();
+		this.picture = "assets/img/noImage.png";
 	}
 
 	public Product(int id, String name, String description, double cost,
@@ -51,6 +55,7 @@ public class Product {
 		this.rrp = rrp;
 		this.productStock = productStock;
 		this.categories = categories;
+		this.picture = "assets/img/noImage.png";
 	}
 
 	public Product(String name, String description, double cost, double rrp,
@@ -113,6 +118,14 @@ public class Product {
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
 
 	@Override

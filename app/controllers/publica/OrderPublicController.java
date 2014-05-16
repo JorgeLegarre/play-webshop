@@ -15,6 +15,7 @@ import models.OrderStatus;
 import models.ShoppingCartDetail;
 import models.User;
 import play.db.jpa.Transactional;
+import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
 import utils.DateUtils;
@@ -25,6 +26,7 @@ import DAO.OrderStatusDao;
 import DAO.ShoppingCartDao;
 import DAO.UserDao;
 import controllers.GeneralController;
+import controllers.privat.RestAutenticatedController;
 
 public class OrderPublicController extends GeneralController {
 	private final static OrderManager orderManager = new OrderManager(
@@ -57,7 +59,7 @@ public class OrderPublicController extends GeneralController {
 	public static Result placeOrder() {
 		Order order = getOrder();
 
-		voidShoppingCart(order);
+		voidShoppingCart(order.getUser());
 
 		orderManager.save(order);
 
@@ -66,9 +68,23 @@ public class OrderPublicController extends GeneralController {
 		return redirect(routes.OrderPublicController.showUserOrders());
 	}
 
-	private static void voidShoppingCart(Order order) {
-		int id = order.getUser().getShoppingCart().getId();
-		order.getUser().setShoppingCart(null);
+	@Transactional
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result placeOrderRest() {
+		Order order = getOrder();
+		System.out.println("order" + 1);
+		voidShoppingCart(order.getUser());
+		System.out.println("order" + 2);
+		orderManager.save(order);
+		System.out.println("order" + 3);
+		session().put("items", "0");
+		System.out.println("order" + 4);
+		return ok(Json.toJson(true));
+	}
+
+	private static void voidShoppingCart(User user) {
+		int id = user.getShoppingCart().getId();
+		user.setShoppingCart(null);
 		shoppingCartManager.removeById(id);
 	}
 
@@ -107,7 +123,7 @@ public class OrderPublicController extends GeneralController {
 	}
 
 	private static User getCurrentUser() {
-		String email = session().get("username");
+		String email = session().get("email");
 		return userManager.findByEmail(email);
 	}
 

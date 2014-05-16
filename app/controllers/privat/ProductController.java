@@ -9,6 +9,7 @@ import models.Category;
 import models.Product;
 import play.data.Form;
 import play.db.jpa.Transactional;
+import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.privat.product.listAll;
@@ -86,6 +87,53 @@ public final class ProductController extends GeneralController {
 		productManager.save(product);
 
 		return redirect(routes.ProductController.listAllProducts());
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result listAllProductsRest() {
+		List<Product> products = productManager.listAll();
+
+		setNullToProductsOfCategories(products);
+
+		return ok(Json.toJson(products));
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result getProductRest(int id) {
+		Product product = productManager.findById(id);
+
+		if (product != null) {
+			setNullToProductCategories(product);
+			return ok(Json.toJson(product));
+		}
+
+		return ok("{}");
+	}
+
+	@Transactional
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result saveProductRest() {
+		Product product = parseForm();
+
+		productManager.save(product);
+
+		return ok(Json.toJson(true));
+	}
+
+	private static void setNullToProductsOfCategories(List<Product> products) {
+		for (Product product : products) {
+			setNullToProductCategories(product);
+		}
+
+	}
+
+	private static void setNullToProductCategories(Product product) {
+		List<Category> categories = product.getCategories();
+		for (Category category : categories) {
+			category.setProducts(null);
+		}
 	}
 
 	private static boolean formHasErrors() {

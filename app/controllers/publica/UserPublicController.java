@@ -66,7 +66,7 @@ public class UserPublicController extends Controller {
 	}
 
 	private static User getCurrentUser() {
-		String email = session().get("username");
+		String email = session().get("email");
 		return userManager.findByEmail(email);
 	}
 }

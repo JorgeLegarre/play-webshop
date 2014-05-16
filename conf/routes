@@ -81,6 +81,28 @@ POST    /ganges/cart/updateCart                     controllers.publica.Shopping
 GET    /ganges/categories                           controllers.publica.CategoryPublicController.listAllCategories()
 GET    /ganges/category/:id                         controllers.publica.CategoryPublicController.showCategory(id: Int)
 
+#REST
+POST 	/rest/logIn									controllers.SignInController.logInRest()
+POST 	/rest/logOut								controllers.SignInController.logOutRest()
+
+#ADMIN
+#category
+GET 	/admin/rest/categories						controllers.privat.CategoryController.listAllCategoriesRest()
+GET 	/admin/rest/category/:id					controllers.privat.CategoryController.getCategoryRest(id:Int)
+PUT 	/admin/rest/category						controllers.privat.CategoryController.saveCategoryRest()
+
+#product
+GET 	/admin/rest/products						controllers.privat.ProductController.listAllProductsRest()
+GET 	/admin/rest/product/:id						controllers.privat.ProductController.getProductRest(id:Int)
+PUT 	/admin/rest/product							controllers.privat.ProductController.saveProductRest()
+
+#USER
+#product
+GET     /user/rest/products							controllers.publica.ProductsPublicController.listAllProductsRest()
+GET 	/user/rest/product/:id						controllers.publica.ProductsPublicController.getProductRest(id:Int)
+PUT     /user/rest/addProductToShoppingCart			controllers.publica.ShoppingCartController.addToCartRest()
+PUT     /user/rest/placeOrder						controllers.publica.OrderPublicController.placeOrderRest()
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               				controllers.Assets.at(path="/public", file)
 

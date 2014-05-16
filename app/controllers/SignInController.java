@@ -2,8 +2,6 @@ package controllers;
 
 import manager.UserManager;
 import models.User;
-import play.api.mvc.Call;
-import play.api.templates.Html;
 import play.data.Form;
 import play.db.jpa.Transactional;
 import play.mvc.Result;
@@ -26,8 +24,17 @@ public class SignInController extends GeneralController {
 
 	@Transactional
 	public static Result privateLogin() {
-		return login(true, routes.ApplicationController.privateMainMenu(),
-				privateLogin.render());
+
+		SignInForm signIn = getLoginForm();
+
+		User user = loginLikeAdmin(signIn.email, signIn.password);
+
+		if (isLogged(user)) {
+			return redirect(routes.ApplicationController.privateMainMenu());
+		} else {
+			flash().put("invalid", "yes");
+			return ok(privateLogin.render());
+		}
 	}
 
 	public static Result privateLogOut() {
@@ -45,8 +52,18 @@ public class SignInController extends GeneralController {
 
 	@Transactional
 	public static Result publicLogin() {
-		return login(false, routes.ApplicationController.publicMainMenu(),
-				publicLogin.render());
+
+		SignInForm signIn = getLoginForm();
+
+		User user = loginLikeUser(signIn.email, signIn.password);
+
+		if (isLogged(user)) {
+			return redirect(routes.ApplicationController.publicMainMenu());
+		} else {
+			flash().put("invalid", "yes");
+			return ok(publicLogin.render());
+		}
+
 	}
 
 	public static Result publicLogOut() {
@@ -54,29 +71,79 @@ public class SignInController extends GeneralController {
 		return redirect(routes.SignInController.showPublicLogin());
 	}
 
-	// COMMON
-	private static Result login(boolean adminRequired, Call destinationOk,
-			Html destinationNOK) {
-		session().clear();
+	// REST
+	@Transactional
+	public static Result logInRest() {
+		String email = getParamString("email");
+		String password = getParamString("password");
 
-		Form<SignInForm> signInForm = Form.form(SignInForm.class);
-		SignInForm signIn = signInForm.bindFromRequest().get();
+		User user = loginLikeAdmin(email, password);
 
-		User user = userManager.loginUser(signIn.email, signIn.password,
-				adminRequired);
-
-		if (user != null) {
-			session().put("username", user.getEmail());
-
-			int nItems = (user.getShoppingCart() != null) ? user
-					.getShoppingCart().getTotalItems() : 0;
-			session().put("items", nItems + "");
-			return redirect(destinationOk);
+		if (isNotLogged(user)) {
+			user = loginLikeUser(email, password);
 		}
 
-		flash().put("invalid", "yes");
+		if (isNotLogged(user)) {
+			session().clear();
+			return ok();
+		}
 
-		return ok(destinationNOK);
+		return ok("Log in by ");
+	}
+
+	public static Result logOutRest() {
+		if (session().get("username") != null) {
+			session().clear();
+			return ok("Log Out done correctly!!!!");
+		} else {
+			return ok("You never was logged in");
+		}
+
+	}
+
+	// COMMON
+	private static User loginLikeAdmin(String email, String password) {
+		return login(email, password, true);
+	}
+
+	private static User loginLikeUser(String email, String password) {
+		return login(email, password, false);
+	}
+
+	private static User login(String email, String password, boolean likeAdmin) {
+		User user = userManager.loginUser(email, password, likeAdmin);
+
+		if (isLogged(user)) {
+			setItemsInSession(user, likeAdmin);
+		}
+		return user;
+	}
+
+	private static void setItemsInSession(User user, boolean isAdmin) {
+		session().put("email", user.getEmail());
+
+		session().put("username", user.getFirstname());
+
+		session().put("isAdmin", String.valueOf(isAdmin));
+
+		int nItemsShoppingCart = (user.getShoppingCart() != null) ? user
+				.getShoppingCart().getTotalItems() : 0;
+
+		session().put("items", nItemsShoppingCart + "");
+
+	}
+
+	private static boolean isLogged(User user) {
+		return user != null;
+	}
+
+	private static boolean isNotLogged(User user) {
+		return !isLogged(user);
+	}
+
+	private static SignInForm getLoginForm() {
+		Form<SignInForm> signInForm = Form.form(SignInForm.class);
+		return signInForm.bindFromRequest().get();
 	}
 
 }

@@ -2,16 +2,17 @@ package controllers.privat;
 
 import java.util.List;
 
-import controllers.GeneralController;
 import manager.CategoryManager;
 import models.Category;
 import play.data.Form;
 import play.db.jpa.Transactional;
+import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.privat.category.listAll;
 import views.html.privat.category.upsert;
 import DAO.CategoryDao;
+import controllers.GeneralController;
 import forms.CategoryForm;
 
 public class CategoryController extends GeneralController {
@@ -73,6 +74,46 @@ public class CategoryController extends GeneralController {
 		categoryManager.save(category);
 
 		return redirect(routes.CategoryController.listAllCategories());
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result listAllCategoriesRest() {
+		List<Category> categories = categoryManager.listAll();
+
+		setNullToProducts(categories);
+
+		return ok(Json.toJson(categories));
+	}
+
+	@Transactional(readOnly = true)
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result getCategoryRest(int id) {
+		Category category = categoryManager.findById(id);
+
+		if (category != null) {
+			category.setProducts(null);
+			return ok(Json.toJson(category));
+		}
+
+		return ok("{}");
+	}
+
+	@Transactional
+	@Security.Authenticated(RestAutenticatedController.class)
+	public static Result saveCategoryRest() {
+		Category category = parseForm();
+
+		categoryManager.save(category);
+
+		return ok(Json.toJson(true));
+	}
+
+	private static void setNullToProducts(List<Category> categories) {
+		for (Category category : categories) {
+			category.setProducts(null);
+		}
+
 	}
 
 	private static Result showCategory(Category category) {

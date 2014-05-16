@@ -23,7 +23,7 @@ public final class ShoppingCart implements Serializable {
 	@OneToOne
 	private User user;
 
-	@OneToMany(mappedBy = "id.userId", cascade = { CascadeType.ALL }, orphanRemoval = true)
+	@OneToMany(mappedBy = "id.shoppingCartId", cascade = { CascadeType.ALL }, orphanRemoval = true)
 	private List<ShoppingCartDetail> shoppingCartDetails;
 
 	public ShoppingCart() {
